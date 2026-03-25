@@ -132,14 +132,13 @@
     <div id="messages" style="height:250px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
 
     <input id="msgInput" placeholder="Écris un message" style="width:70%; padding:5px;">
+    <!-- Fix: ajout type="button" pour empêcher le formulaire de recharger la page -->
     <button type="button" onclick="sendMsg()" style="width:28%; padding:5px;">Envoyer</button>
   </div>
 
 </div> <!-- FIN DU MAIN SITE -->
 
 <script>
-  let currentUser = "Invité"; // <-- VARIABLE GLOBALE POUR CHAT
-
   function getUsers() {
     return JSON.parse(localStorage.getItem("users") || "{}");
   }
@@ -181,7 +180,6 @@
       document.getElementById("loginPage").style.display = "none";
       document.getElementById("mainSite").style.display = "block";
 
-      currentUser = user; // <-- MISE À JOUR DE L'UTILISATEUR CONNECTÉ
       document.getElementById("userDisplay").innerText = "Connecté en tant que : " + user;
     } else {
       alert("Identifiants incorrects");
@@ -191,7 +189,6 @@
   function logout() {
     document.getElementById("mainSite").style.display = "none";
     document.getElementById("loginPage").style.display = "flex";
-    currentUser = "Invité"; // <-- RAZ UTILISATEUR
   }
 
   function showRegister() {
@@ -233,10 +230,12 @@
 <script>
 function sendMsg() {
   let msg = document.getElementById("msgInput").value;
+  let user = document.getElementById("userDisplay").innerText || "Invité";
+
   if (!msg) return;
 
   db.ref("messages").push({
-    user: currentUser, // <-- UTILISER LA VARIABLE GLOBALE
+    user: user,
     text: msg
   });
 
