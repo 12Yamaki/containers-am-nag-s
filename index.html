@@ -125,17 +125,15 @@
     <p id="userDisplay"></p>
   </div>
 
-  <!-- PAGE CHAT AJOUTÉE -->
+  <!-- PAGE CHAT -->
   <div id="chat" class="page">
     <h2>Communication</h2>
-
     <div id="messages" style="height:250px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
-
     <input id="msgInput" placeholder="Écris un message" style="width:70%; padding:5px;">
     <button onclick="sendMsg()" style="width:28%; padding:5px;">Envoyer</button>
   </div>
 
-</div> <!-- FIN DU MAIN SITE -->
+</div>
 
 <script>
   function getUsers() {
@@ -178,7 +176,6 @@
     if (users[user] && users[user] === pass) {
       document.getElementById("loginPage").style.display = "none";
       document.getElementById("mainSite").style.display = "block";
-
       document.getElementById("userDisplay").innerText = "Connecté en tant que : " + user;
     } else {
       alert("Identifiants incorrects");
@@ -208,13 +205,14 @@
 </script>
 
 <!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
 
+<script>
   const firebaseConfig = {
     apiKey: "AIzaSyBlQw4vMAqGU4Ii8ShHptQOqMvfnoXqBdA",
     authDomain: "contenaires-it.firebaseapp.com",
+    databaseURL: "https://contenaires-it-default-rtdb.firebaseio.com",
     projectId: "contenaires-it",
     storageBucket: "contenaires-it.firebasestorage.app",
     messagingSenderId: "227255285917",
@@ -222,26 +220,32 @@
     measurementId: "G-LFE11Z9V50"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+</script>
 
-  window.sendMsg = function() {
-    let msg = document.getElementById("msgInput").value;
-    let user = document.getElementById("userDisplay").innerText || "Invité";
+<script>
+function sendMsg() {
+  let msg = document.getElementById("msgInput").value;
+  let user = document.getElementById("userDisplay").innerText || "Invité";
 
-    if (!msg) return;
+  if (!msg) return;
 
-    push(ref(db, "messages"), { user: user, text: msg });
-    document.getElementById("msgInput").value = "";
-  };
-
-  onChildAdded(ref(db, "messages"), function(snapshot) {
-    let data = snapshot.val();
-    let chat = document.getElementById("messages");
-
-    chat.innerHTML += "<div><b>" + data.user + ":</b> " + data.text + "</div>";
-    chat.scrollTop = chat.scrollHeight;
+  db.ref("messages").push({
+    user: user,
+    text: msg
   });
+
+  document.getElementById("msgInput").value = "";
+}
+
+// Recevoir les messages en direct
+db.ref("messages").on("child_added", function(snapshot) {
+  let data = snapshot.val();
+  let chat = document.getElementById("messages");
+  chat.innerHTML += "<div><b>" + data.user + ":</b> " + data.text + "</div>";
+  chat.scrollTop = chat.scrollHeight;
+});
 </script>
 
 </body>
