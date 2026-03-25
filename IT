@@ -212,7 +212,7 @@
   const firebaseConfig = {
     apiKey: "AIzaSyBlQw4vMAqGU4Ii8ShHptQOqMvfnoXqBdA",
     authDomain: "contenaires-it.firebaseapp.com",
-    databaseURL: "https://contenaires-it-default-rtdb.firebaseio.com",
+    databaseURL: "https://contenaires-it-default-rtdb.europe-west1.firebasedatabase.app/",
     projectId: "contenaires-it",
     storageBucket: "contenaires-it.firebasestorage.app",
     messagingSenderId: "227255285917",
