@@ -145,13 +145,20 @@
   }
 
   function register() {
-    let user = document.getElementById("registerUser").value.trim();
-    let pass = document.getElementById("registerPass").value.trim();
+    let user = document.getElementById("registerUser").value;
+    let pass = document.getElementById("registerPass").value;
 
-    if (!user || !pass) { alert("Remplis tous les champs"); return; }
+    if (!user || !pass) {
+      alert("Remplis tous les champs");
+      return;
+    }
 
     let users = getUsers();
-    if (users[user]) { alert("Utilisateur déjà existant"); return; }
+
+    if (users[user]) {
+      alert("Utilisateur déjà existant");
+      return;
+    }
 
     users[user] = pass;
     saveUsers(users);
@@ -161,15 +168,18 @@
   }
 
   function login() {
-    let user = document.getElementById("loginUser").value.trim();
-    let pass = document.getElementById("loginPass").value.trim();
+    let user = document.getElementById("loginUser").value;
+    let pass = document.getElementById("loginPass").value;
 
     let users = getUsers();
+
     if (users[user] && users[user] === pass) {
       document.getElementById("loginPage").style.display = "none";
       document.getElementById("mainSite").style.display = "block";
-      document.getElementById("userDisplay").innerText = "Connecté en tant que : " + user;
-    } else { alert("Identifiants incorrects"); }
+      document.getElementById("userDisplay").innerText = user; // <-- uniquement le nom
+    } else {
+      alert("Identifiants incorrects");
+    }
   }
 
   function logout() {
@@ -188,7 +198,8 @@
   }
 
   function showPage(pageId) {
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    let pages = document.querySelectorAll(".page");
+    pages.forEach(p => p.classList.remove("active"));
     document.getElementById(pageId).classList.add("active");
   }
 </script>
@@ -201,7 +212,7 @@
   const firebaseConfig = {
     apiKey: "AIzaSyBlQw4vMAqGU4Ii8ShHptQOqMvfnoXqBdA",
     authDomain: "contenaires-it.firebaseapp.com",
-    databaseURL: "https://contenaires-it-default-rtdb.europe-west1.firebasedatabase.app",
+    databaseURL: "https://contenaires-it-default-rtdb.europe-west1.firebasedatabase.app", // <-- URL CORRECTE
     projectId: "contenaires-it",
     storageBucket: "contenaires-it.firebasestorage.app",
     messagingSenderId: "227255285917",
@@ -215,34 +226,26 @@
 
 <script>
 function sendMsg() {
-  let msg = document.getElementById("msgInput").value.trim();
-  let user = document.getElementById("userDisplay").innerText.replace("Connecté en tant que : ", "").trim() || "Invité";
+  let msg = document.getElementById("msgInput").value;
+  let user = document.getElementById("userDisplay").innerText || "Invité";
 
-  if (!msg) {
-    alert("Écris un message !");
-    return;
-  }
+  if (!msg) return;
 
   db.ref("messages").push({
-    user: String(user),
-    text: String(msg)
-  })
-  .then(() => {
-    document.getElementById("msgInput").value = "";
-  })
-  .catch(err => {
-    console.error("Erreur Firebase :", err);
+    user: user,
+    text: msg
   });
+
+  document.getElementById("msgInput").value = "";
 }
 
 // Recevoir les messages en direct
 db.ref("messages").on("child_added", function(snapshot) {
   let data = snapshot.val();
-  if (data && data.user && data.text) {
-    let chat = document.getElementById("messages");
-    chat.innerHTML += "<div><b>" + data.user + ":</b> " + data.text + "</div>";
-    chat.scrollTop = chat.scrollHeight;
-  }
+  if (!data) return; // sécurité
+  let chat = document.getElementById("messages");
+  chat.innerHTML += "<div><b>" + data.user + ":</b> " + data.text + "</div>";
+  chat.scrollTop = chat.scrollHeight;
 });
 </script>
 
