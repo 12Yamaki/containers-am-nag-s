@@ -207,5 +207,55 @@
   }
 </script>
 
+
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
+
+<script>
+  // Config Firebase récupérée depuis ta console
+  const firebaseConfig = {
+    apiKey: "AIzaSyBlQw4vMAqGU4Ii8ShHptQOqMvfnoXqBdA",
+    authDomain: "contenaires-it.firebaseapp.com",
+    projectId: "contenaires-it",
+    storageBucket: "contenaires-it.firebasestorage.app",
+    messagingSenderId: "227255285917",
+    appId: "1:227255285917:web:c89ed24a70214bed727c74",
+    measurementId: "G-LFE11Z9V50"
+  };
+
+  // Initialiser Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+</script>
+
+
+<script>
+
+function sendMsg() {
+  let msg = document.getElementById("msgInput").value;
+  let user = document.getElementById("userDisplay").innerText || "Invité";
+
+  if (!msg) return;
+
+  db.ref("messages").push({
+    user: user,
+    text: msg
+  });
+
+  document.getElementById("msgInput").value = "";
+}
+
+// Recevoir les messages en direct
+db.ref("messages").on("child_added", function(snapshot) {
+  let data = snapshot.val();
+  let chat = document.getElementById("messages");
+
+  chat.innerHTML += "<div><b>" + data.user + ":</b> " + data.text + "</div>";
+  chat.scrollTop = chat.scrollHeight;
+});
+</script>
+
 </body>
 </html>
