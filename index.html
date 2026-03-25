@@ -111,6 +111,7 @@
   <nav>
     <button onclick="showPage('home')">Accueil</button>
     <button onclick="showPage('profile')">Profil</button>
+    <button onclick="showPage('chat')">Chat</button>
     <button onclick="logout()">Déconnexion</button>
   </nav>
 
@@ -124,7 +125,17 @@
     <p id="userDisplay"></p>
   </div>
 
-</div>
+  <!-- PAGE CHAT AJOUTÉE -->
+  <div id="chat" class="page">
+    <h2>Communication</h2>
+
+    <div id="messages" style="height:250px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
+
+    <input id="msgInput" placeholder="Écris un message" style="width:70%; padding:5px;">
+    <button onclick="sendMsg()" style="width:28%; padding:5px;">Envoyer</button>
+  </div>
+
+</div> <!-- FIN DU MAIN SITE -->
 
 <script>
   function getUsers() {
