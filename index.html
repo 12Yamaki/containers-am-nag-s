@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mon Site</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      margin: 0;
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      width: 320px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #667eea;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .link {
+      margin-top: 10px;
+      display: block;
+      color: #667eea;
+      cursor: pointer;
+    }
+
+    nav {
+      background: #333;
+      padding: 10px;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .page {
+      display: none;
+      padding: 20px;
+      background: white;
+      min-height: calc(100vh - 50px);
+    }
+
+    .active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- CONNEXION -->
+<div id="loginPage" class="container">
+  <div class="box">
+    <h2>Connexion</h2>
+    <input type="text" id="loginUser" placeholder="Nom d'utilisateur">
+    <input type="password" id="loginPass" placeholder="Mot de passe">
+    <button onclick="login()">Se connecter</button>
+    <span class="link" onclick="showRegister()">Créer un compte</span>
+  </div>
+</div>
+
+<!-- INSCRIPTION -->
+<div id="registerPage" class="container" style="display:none;">
+  <div class="box">
+    <h2>Inscription</h2>
+    <input type="text" id="registerUser" placeholder="Nom d'utilisateur">
+    <input type="password" id="registerPass" placeholder="Mot de passe">
+    <button onclick="register()">S'inscrire</button>
+    <span class="link" onclick="showLogin()">Déjà un compte ?</span>
+  </div>
+</div>
+
+<!-- SITE -->
+<div id="mainSite" style="display:none;">
+
+  <nav>
+    <button onclick="showPage('home')">Accueil</button>
+    <button onclick="showPage('profile')">Profil</button>
+    <button onclick="logout()">Déconnexion</button>
+  </nav>
+
+  <div id="home" class="page active">
+    <h2>Accueil</h2>
+    <p>Bienvenue sur le site !</p>
+  </div>
+
+  <div id="profile" class="page">
+    <h2>Profil</h2>
+    <p id="userDisplay"></p>
+  </div>
+
+</div>
+
+<script>
+  function getUsers() {
+    return JSON.parse(localStorage.getItem("users") || "{}");
+  }
+
+  function saveUsers(users) {
+    localStorage.setItem("users", JSON.stringify(users));
+  }
+
+  function register() {
+    let user = document.getElementById("registerUser").value;
+    let pass = document.getElementById("registerPass").value;
+
+    if (!user || !pass) {
+      alert("Remplis tous les champs");
+      return;
+    }
+
+    let users = getUsers();
+
+    if (users[user]) {
+      alert("Utilisateur déjà existant");
+      return;
+    }
+
+    users[user] = pass;
+    saveUsers(users);
+
+    alert("Compte créé !");
+    showLogin();
+  }
+
+  function login() {
+    let user = document.getElementById("loginUser").value;
+    let pass = document.getElementById("loginPass").value;
+
+    let users = getUsers();
+
+    if (users[user] && users[user] === pass) {
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("mainSite").style.display = "block";
+
+      document.getElementById("userDisplay").innerText = "Connecté en tant que : " + user;
+    } else {
+      alert("Identifiants incorrects");
+    }
+  }
+
+  function logout() {
+    document.getElementById("mainSite").style.display = "none";
+    document.getElementById("loginPage").style.display = "flex";
+  }
+
+  function showRegister() {
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("registerPage").style.display = "flex";
+  }
+
+  function showLogin() {
+    document.getElementById("registerPage").style.display = "none";
+    document.getElementById("loginPage").style.display = "flex";
+  }
+
+  function showPage(pageId) {
+    let pages = document.querySelectorAll(".page");
+    pages.forEach(p => p.classList.remove("active"));
+    document.getElementById(pageId).classList.add("active");
+  }
+</script>
+
+</body>
+</html>
