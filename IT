@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Chat Employés</title>
+  <title>Chat Employés (Texte + Images)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -32,46 +32,17 @@
       border: 1px solid #ccc;
       font-size: 16px;
     }
-    button {
-      border: none;
-      background: #667eea;
-      color: white;
-      cursor: pointer;
-    }
-    .link {
-      margin-top: 10px;
-      display: block;
-      color: #667eea;
-      cursor: pointer;
-    }
-    nav {
-      background: #333;
-      padding: 10px;
-      display: flex;
-      justify-content: space-around;
-    }
-    nav button {
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-    }
-    .page {
-      display: none;
-      padding: 20px;
-      background: white;
-      min-height: calc(100vh - 50px);
-    }
+    button { border: none; background: #667eea; color: white; cursor: pointer; }
+    .link { margin-top: 10px; display: block; color: #667eea; cursor: pointer; }
+    nav { background: #333; padding: 10px; display: flex; justify-content: space-around; }
+    nav button { background: none; border: none; color: white; cursor: pointer; }
+    .page { display: none; padding: 20px; background: white; min-height: calc(100vh - 50px); }
     .active { display: block; }
-    #messages {
-      height: 250px;
-      overflow-y: auto;
-      border:1px solid #ccc;
-      padding:10px;
-      margin-bottom:10px;
-    }
-    #msgInput { width: 70%; padding:5px; }
-    #chat button { width:28%; padding:5px; }
+    #messages { height: 250px; overflow-y: auto; border:1px solid #ccc; padding:10px; margin-bottom:10px; }
+    #msgInput { width: 60%; padding:5px; }
+    #imageInput { width: 38%; padding:5px; }
+    #chat button { width: 100%; margin-top:5px; }
+    img.chat-img { max-width: 100%; border-radius: 8px; margin:5px 0; }
   </style>
 </head>
 
@@ -122,31 +93,29 @@
     <h2>Communication</h2>
     <div id="messages"></div>
     <input id="msgInput" placeholder="Écris un message">
+    <input type="file" id="imageInput" accept="image/*">
     <button id="sendBtn">Envoyer</button>
   </div>
 </div>
 
 <script>
-  // Utilisateurs en localStorage
-  function getUsers() { return JSON.parse(localStorage.getItem("users") || "{}"); }
-  function saveUsers(users) { localStorage.setItem("users", JSON.stringify(users)); }
+  function getUsers() { return JSON.parse(localStorage.getItem("users")||"{}"); }
+  function saveUsers(users){ localStorage.setItem("users",JSON.stringify(users)); }
 
-  function register() {
-    let user = document.getElementById("registerUser").value.trim();
-    let pass = document.getElementById("registerPass").value.trim();
-    if(!user||!pass){ alert("Remplis tous les champs"); return; }
-
-    let users = getUsers();
-    if(users[user]){ alert("Utilisateur déjà existant"); return; }
-
-    users[user] = pass; saveUsers(users);
+  function register(){
+    let user=document.getElementById("registerUser").value.trim();
+    let pass=document.getElementById("registerPass").value.trim();
+    if(!user||!pass){alert("Remplis tous les champs"); return;}
+    let users=getUsers();
+    if(users[user]){alert("Utilisateur déjà existant"); return;}
+    users[user]=pass; saveUsers(users);
     alert("Compte créé !"); showLogin();
   }
 
-  function login() {
-    let user = document.getElementById("loginUser").value.trim();
-    let pass = document.getElementById("loginPass").value.trim();
-    let users = getUsers();
+  function login(){
+    let user=document.getElementById("loginUser").value.trim();
+    let pass=document.getElementById("loginPass").value.trim();
+    let users=getUsers();
     if(users[user] && users[user]===pass){
       document.getElementById("loginPage").style.display="none";
       document.getElementById("mainSite").style.display="block";
@@ -175,46 +144,64 @@
   }
 </script>
 
-<!-- Firebase Realtime Database -->
+<!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBlQw4vMAqGU4Ii8ShHptQOqMvfnoXqBdA",
     authDomain: "contenaires-it.firebaseapp.com",
     databaseURL: "https://contenaires-it-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "contenaires-it",
-    storageBucket: "contenaires-it.firebasestorage.app",
+    storageBucket: "contenaires-it.appspot.com",
     messagingSenderId: "227255285917",
     appId: "1:227255285917:web:c89ed24a70214bed727c74"
   };
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
+  const storage = getStorage(app);
 
   const input = document.getElementById("msgInput");
+  const imageInput = document.getElementById("imageInput");
   const btn = document.getElementById("sendBtn");
   const chatDiv = document.getElementById("messages");
 
-  // Envoyer message
-  function sendMsg(){
+  async function sendMsg(){
     const user = document.getElementById("userDisplay").innerText.replace("Connecté en tant que : ","") || "Invité";
     const text = input.value.trim();
-    if(!text) return;
-    push(ref(db,"messages"),{user,text});
-    input.value="";
+    const file = imageInput.files[0];
+
+    if(!text && !file) return; // rien à envoyer
+
+    let messageData = { user, text: text || "" };
+
+    if(file){
+      const imageRef = sRef(storage,"images/"+Date.now()+"_"+file.name);
+      await uploadBytes(imageRef,file);
+      const url = await getDownloadURL(imageRef);
+      messageData.image = url;
+    }
+
+    push(ref(db,"messages"),messageData);
+    input.value = "";
+    imageInput.value = "";
   }
+
   btn.addEventListener("click",sendMsg);
   input.addEventListener("keypress",e=>{if(e.key==="Enter") sendMsg();});
 
-  // Recevoir messages
   onChildAdded(ref(db,"messages"),snapshot=>{
     const data = snapshot.val();
     if(!data) return;
-    chatDiv.innerHTML += `<div><b>${data.user}:</b> ${data.text}</div>`;
+    let html = `<div><b>${data.user}:</b> ${data.text || ""}</div>`;
+    if(data.image) html += `<img src="${data.image}" class="chat-img">`;
+    chatDiv.innerHTML += html;
     chatDiv.scrollTop = chatDiv.scrollHeight;
   });
 </script>
+
 </body>
 </html>
