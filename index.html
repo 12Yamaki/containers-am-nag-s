@@ -2,53 +2,27 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Chat Employés (Texte + Images)</title>
+  <title>Chat Employés</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      margin: 0;
-      height: 100vh;
-    }
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .box {
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      width: 320px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-    button { border: none; background: #667eea; color: white; cursor: pointer; }
-    .link { margin-top: 10px; display: block; color: #667eea; cursor: pointer; }
-    nav { background: #333; padding: 10px; display: flex; justify-content: space-around; }
-    nav button { background: none; border: none; color: white; cursor: pointer; }
-    .page { display: none; padding: 20px; background: white; min-height: calc(100vh - 50px); }
-    .active { display: block; }
-    #messages { height: 250px; overflow-y: auto; border:1px solid #ccc; padding:10px; margin-bottom:10px; }
-    #msgInput { width: 60%; padding:5px; }
-    #imageInput { width: 38%; padding:5px; }
-    #chat button { width: 100%; margin-top:5px; }
-    img.chat-img { max-width: 100%; border-radius: 8px; margin:5px 0; }
+    body { font-family: Arial; background: linear-gradient(135deg,#667eea,#764ba2); margin:0; height:100vh; }
+    .container { display:flex; justify-content:center; align-items:center; height:100vh; }
+    .box { background:white; padding:30px; border-radius:15px; width:320px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); }
+    input, button { width:100%; padding:10px; margin:5px 0; border-radius:8px; border:1px solid #ccc; }
+    button { background:#667eea; color:white; cursor:pointer; }
+    nav { background:#333; padding:10px; display:flex; justify-content:space-around; }
+    nav button { background:none; border:none; color:white; cursor:pointer; }
+    .page { display:none; padding:20px; background:white; min-height:calc(100vh - 50px); }
+    .active { display:block; }
+    #messages { height:300px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px; }
+    #msgInput { width:60%; display:inline-block; }
+    #imgInput { width:30%; display:inline-block; }
+    #chat button { width:100%; margin-top:5px; }
+    img.chat-img { max-width:100%; border-radius:8px; margin-top:5px; }
   </style>
 </head>
-
 <body>
 
-<!-- Connexion -->
+<!-- CONNEXION -->
 <div id="loginPage" class="container">
   <div class="box">
     <h2>Connexion</h2>
@@ -59,7 +33,7 @@
   </div>
 </div>
 
-<!-- Inscription -->
+<!-- INSCRIPTION -->
 <div id="registerPage" class="container" style="display:none;">
   <div class="box">
     <h2>Inscription</h2>
@@ -70,7 +44,7 @@
   </div>
 </div>
 
-<!-- Chat -->
+<!-- SITE -->
 <div id="mainSite" style="display:none;">
   <nav>
     <button onclick="showPage('home')">Accueil</button>
@@ -93,23 +67,25 @@
     <h2>Communication</h2>
     <div id="messages"></div>
     <input id="msgInput" placeholder="Écris un message">
-    <input type="file" id="imageInput" accept="image/*">
+    <input type="file" id="imgInput" accept="image/*">
     <button id="sendBtn">Envoyer</button>
   </div>
 </div>
 
 <script>
-  function getUsers() { return JSON.parse(localStorage.getItem("users")||"{}"); }
-  function saveUsers(users){ localStorage.setItem("users",JSON.stringify(users)); }
+  function getUsers(){ return JSON.parse(localStorage.getItem("users")||"{}"); }
+  function saveUsers(users){ localStorage.setItem("users", JSON.stringify(users)); }
 
   function register(){
     let user=document.getElementById("registerUser").value.trim();
     let pass=document.getElementById("registerPass").value.trim();
-    if(!user||!pass){alert("Remplis tous les champs"); return;}
+    if(!user||!pass){ alert("Remplis tous les champs"); return; }
     let users=getUsers();
-    if(users[user]){alert("Utilisateur déjà existant"); return;}
-    users[user]=pass; saveUsers(users);
-    alert("Compte créé !"); showLogin();
+    if(users[user]){ alert("Utilisateur déjà existant"); return; }
+    users[user]=pass;
+    saveUsers(users);
+    alert("Compte créé !");
+    showLogin();
   }
 
   function login(){
@@ -120,88 +96,70 @@
       document.getElementById("loginPage").style.display="none";
       document.getElementById("mainSite").style.display="block";
       document.getElementById("userDisplay").innerText="Connecté en tant que : "+user;
-    } else alert("Identifiants incorrects");
+    } else { alert("Identifiants incorrects"); }
   }
 
-  function logout(){
-    document.getElementById("mainSite").style.display="none";
-    document.getElementById("loginPage").style.display="flex";
-  }
-
-  function showRegister(){
-    document.getElementById("loginPage").style.display="none";
-    document.getElementById("registerPage").style.display="flex";
-  }
-
-  function showLogin(){
-    document.getElementById("registerPage").style.display="none";
-    document.getElementById("loginPage").style.display="flex";
-  }
-
-  function showPage(pageId){
-    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-    document.getElementById(pageId).classList.add("active");
-  }
+  function logout(){ document.getElementById("mainSite").style.display="none"; document.getElementById("loginPage").style.display="flex"; }
+  function showRegister(){ document.getElementById("loginPage").style.display="none"; document.getElementById("registerPage").style.display="flex"; }
+  function showLogin(){ document.getElementById("registerPage").style.display="none"; document.getElementById("loginPage").style.display="flex"; }
+  function showPage(id){ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(id).classList.add("active"); }
 </script>
 
 <!-- Firebase -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-  import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBlQw4vMAqGU4Ii8ShHptQOqMvfnoXqBdA",
-    authDomain: "contenaires-it.firebaseapp.com",
-    databaseURL: "https://contenaires-it-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "contenaires-it",
-    storageBucket: "contenaires-it.appspot.com",
-    messagingSenderId: "227255285917",
-    appId: "1:227255285917:web:c89ed24a70214bed727c74"
-  };
+const firebaseConfig = {
+  apiKey:"AIzaSyBlQw4vMAqGU4Ii8ShHptQOqMvfnoXqBdA",
+  authDomain:"contenaires-it.firebaseapp.com",
+  databaseURL:"https://contenaires-it-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"contenaires-it",
+  storageBucket:"contenaires-it.appspot.com",
+  messagingSenderId:"227255285917",
+  appId:"1:227255285917:web:c89ed24a70214bed727c74"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const storage = getStorage(app);
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+const storage=getStorage(app);
 
-  const input = document.getElementById("msgInput");
-  const imageInput = document.getElementById("imageInput");
-  const btn = document.getElementById("sendBtn");
-  const chatDiv = document.getElementById("messages");
+const input=document.getElementById("msgInput");
+const imgInput=document.getElementById("imgInput");
+const sendBtn=document.getElementById("sendBtn");
+const messagesDiv=document.getElementById("messages");
 
-  async function sendMsg(){
-    const user = document.getElementById("userDisplay").innerText.replace("Connecté en tant que : ","") || "Invité";
-    const text = input.value.trim();
-    const file = imageInput.files[0];
+async function sendMsg(){
+  const user=document.getElementById("userDisplay").innerText.replace("Connecté en tant que : ","")||"Invité";
+  const text=input.value.trim();
+  let imgUrl=null;
 
-    if(!text && !file) return; // rien à envoyer
-
-    let messageData = { user, text: text || "" };
-
-    if(file){
-      const imageRef = sRef(storage,"images/"+Date.now()+"_"+file.name);
-      await uploadBytes(imageRef,file);
-      const url = await getDownloadURL(imageRef);
-      messageData.image = url;
-    }
-
-    push(ref(db,"messages"),messageData);
-    input.value = "";
-    imageInput.value = "";
+  if(imgInput.files.length>0){
+    const file=imgInput.files[0];
+    const storageRef=sRef(storage,"images/"+Date.now()+"_"+file.name);
+    await uploadBytes(storageRef,file);
+    imgUrl=await getDownloadURL(storageRef);
   }
 
-  btn.addEventListener("click",sendMsg);
-  input.addEventListener("keypress",e=>{if(e.key==="Enter") sendMsg();});
+  if(!text && !imgUrl) return;
 
-  onChildAdded(ref(db,"messages"),snapshot=>{
-    const data = snapshot.val();
-    if(!data) return;
-    let html = `<div><b>${data.user}:</b> ${data.text || ""}</div>`;
-    if(data.image) html += `<img src="${data.image}" class="chat-img">`;
-    chatDiv.innerHTML += html;
-    chatDiv.scrollTop = chatDiv.scrollHeight;
-  });
+  push(ref(db,"messages"), { user, text, imgUrl });
+
+  input.value=""; imgInput.value="";
+}
+
+sendBtn.addEventListener("click",sendMsg);
+
+onChildAdded(ref(db,"messages"), snapshot=>{
+  const data=snapshot.val();
+  if(!data) return;
+  let html=`<div><b>${data.user}:</b> ${data.text||""}`;
+  if(data.imgUrl){ html+=`<br><img class="chat-img" src="${data.imgUrl}">`; }
+  html+="</div>";
+  messagesDiv.innerHTML+=html;
+  messagesDiv.scrollTop=messagesDiv.scrollHeight;
+});
 </script>
-
 </body>
 </html>
