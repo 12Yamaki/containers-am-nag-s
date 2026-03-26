@@ -173,18 +173,18 @@
   function showLogin() { document.getElementById("registerPage").style.display="none"; document.getElementById("loginPage").style.display="flex"; }
   function showPage(pageId) { document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(pageId).classList.add("active"); }
 
-  // CHAT Firebase (inchangé)
+  // CHAT local
   const input = document.getElementById("msgInput");
   const chatBtn = document.querySelector("#chat button");
   const messagesDiv = document.getElementById("messages");
 
-  chatBtn.addEventListener("click",()=>{
+  chatBtn.addEventListener("click", ()=>{
     const user = document.getElementById("userDisplay").innerText.replace("Connecté en tant que : ","")||"Invité";
     const text = input.value.trim(); if(!text)return;
     messagesDiv.innerHTML+=`<div><b>${user}:</b> ${text}</div>`; input.value="";
   });
 
-  // CHAT IA (Render H24)
+  // CHAT IA
   async function sendAI() {
     const aiInput = document.getElementById("aiInput");
     const aiMessages = document.getElementById("aiMessages");
@@ -196,13 +196,13 @@
     aiInput.value = "";
 
     try {
-      const response = await fetch("https://containers-amenages.onrender.com", {
+      const response = await fetch("/chat", { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: text })
+        body: JSON.stringify({ message: text })
       });
       const data = await response.json();
-      aiMessages.innerHTML += `<div><b>IA:</b> ${data.response}</div>`;
+      aiMessages.innerHTML += `<div><b>IA:</b> ${data.reply}</div>`;
       aiMessages.scrollTop = aiMessages.scrollHeight;
     } catch(err) {
       aiMessages.innerHTML += `<div><b>IA:</b> Une erreur est survenue 😢</div>`;
