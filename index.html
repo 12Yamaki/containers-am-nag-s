@@ -129,6 +129,7 @@
     <button onclick="showPage('home')">Accueil</button>
     <button onclick="showPage('profile')">Profil</button>
     <button onclick="showPage('chat')">Chat</button>
+    <button onclick="showPage('ai')">IA</button>
     <button onclick="logout()">Déconnexion</button>
   </nav>
 
@@ -150,10 +151,19 @@
     <button>Envoyer</button>
   </div>
 
+  <!-- PAGE IA -->
+  <div id="ai" class="page">
+    <h2>Assistant IA</h2>
+
+    <div id="aiMessages" style="height:250px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
+
+    <input id="aiInput" placeholder="Pose ta question..." style="width:70%; padding:5px;">
+    <button onclick="sendAI()">Envoyer</button>
+  </div>
+
 </div>
 
 <script>
-  // Gestion des utilisateurs stockés en localStorage
   function getUsers() {
     return JSON.parse(localStorage.getItem("users") || "{}");
   }
@@ -206,6 +216,24 @@
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     document.getElementById(pageId).classList.add("active");
   }
+
+  // IA FAKE (test)
+  function sendAI() {
+    const input = document.getElementById("aiInput");
+    const messages = document.getElementById("aiMessages");
+
+    const text = input.value.trim();
+    if (!text) return;
+
+    messages.innerHTML += `<div><b>Toi:</b> ${text}</div>`;
+
+    setTimeout(() => {
+      messages.innerHTML += `<div><b>IA:</b> Je réfléchis encore 😅</div>`;
+      messages.scrollTop = messages.scrollHeight;
+    }, 500);
+
+    input.value = "";
+  }
 </script>
 
 <!-- Firebase -->
@@ -230,7 +258,6 @@
   const chatBtn = document.querySelector("#chat button");
   const messagesDiv = document.getElementById("messages");
 
-  // Envoyer message
   function sendMsg() {
     const user = document.getElementById("userDisplay").innerText.replace("Connecté en tant que : ","") || "Invité";
     const text = input.value.trim();
@@ -241,7 +268,6 @@
 
   chatBtn.addEventListener("click", sendMsg);
 
-  // Recevoir messages en direct
   onChildAdded(ref(db, "messages"), snapshot => {
     const data = snapshot.val();
     if (!data) return;
