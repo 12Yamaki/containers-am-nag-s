@@ -4,16 +4,17 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Chemin vers dossier public
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// 1️⃣ Servir tous les fichiers statiques du dossier public
 app.use(express.static(path.join(__dirname, "public")));
 
-// Route IA
+// 2️⃣ Route IA pour ton chat IA
 app.post("/chat", async (req, res) => {
   const userMessage = req.body.message;
   if (!userMessage) return res.status(400).json({ reply: "Message vide !" });
@@ -40,9 +41,9 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-// Toutes les autres routes renvoient index.html (SPA)
+// 3️⃣ Toujours renvoyer index.html pour toutes les autres routes
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
 const PORT = process.env.PORT || 3000;
