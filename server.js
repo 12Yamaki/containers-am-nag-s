@@ -2,18 +2,16 @@ import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
 import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Servir les fichiers front
-app.use(express.static(path.join(process.cwd(), "public")));
-
-// Route par défaut
-app.get("/", (req, res) => {
-  res.sendFile(path.join(process.cwd(), "public", "index.html"));
-});
+// Chemin vers dossier public
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, "public")));
 
 // Route IA
 app.post("/chat", async (req, res) => {
@@ -42,5 +40,10 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 10000;
+// Toutes les autres routes renvoient index.html (SPA)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Serveur IA lancé sur le port ${PORT}`));
