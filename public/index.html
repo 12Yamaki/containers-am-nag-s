@@ -2,74 +2,21 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Chat Employés + IA</title>
+  <title>Chat Employés</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      margin: 0;
-      height: 100vh;
-    }
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .box {
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      width: 320px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      background: #667eea;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .link {
-      margin-top: 10px;
-      display: block;
-      color: #667eea;
-      cursor: pointer;
-    }
-    nav {
-      background: #333;
-      padding: 10px;
-      display: flex;
-      justify-content: space-around;
-    }
-    nav button {
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-    }
-    .page { display: none; padding: 20px; background: white; min-height: calc(100vh - 50px); }
-    .active { display: block; }
-    #messages, #aiMessages {
-      height: 250px;
-      overflow-y: auto;
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
-    #msgInput, #aiInput { width: 70%; padding: 5px; }
-    #chat button, #ai button { width: 28%; padding: 5px; }
+    body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea, #764ba2); margin:0; height:100vh; }
+    .container { display:flex; justify-content:center; align-items:center; height:100vh; }
+    .box { background:white; padding:30px; border-radius:15px; width:320px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); }
+    input { width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; }
+    button { width:100%; padding:10px; border:none; border-radius:8px; background:#667eea; color:white; font-size:16px; cursor:pointer; }
+    .link { margin-top:10px; display:block; color:#667eea; cursor:pointer; }
+    nav { background:#333; padding:10px; display:flex; justify-content:space-around; }
+    nav button { background:none; border:none; color:white; cursor:pointer; }
+    .page { display:none; padding:20px; background:white; min-height:calc(100vh - 50px); }
+    .active { display:block; }
+    #messages, #aiMessages { height:250px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px; }
+    #msgInput, #aiInput { width:70%; padding:5px; }
+    #chat button, #ai button { width:28%; padding:5px; }
   </style>
 </head>
 <body>
@@ -116,12 +63,12 @@
     <p id="userDisplay"></p>
   </div>
 
-  <!-- CHAT EMPLOYÉS -->
+  <!-- CHAT ENTRE COLLÈGUES -->
   <div id="chat" class="page">
-    <h2>Communication Employés</h2>
+    <h2>Communication</h2>
     <div id="messages"></div>
     <input id="msgInput" placeholder="Écris un message">
-    <button id="sendMsgBtn">Envoyer</button>
+    <button id="chatBtn">Envoyer</button>
   </div>
 
   <!-- CHAT IA -->
@@ -134,42 +81,41 @@
 </div>
 
 <script>
-  // 🔹 Gestion des utilisateurs
-  function getUsers() { return JSON.parse(localStorage.getItem("users") || "{}"); }
+  // Gestion des utilisateurs (localStorage)
+  function getUsers() { return JSON.parse(localStorage.getItem("users")||"{}"); }
   function saveUsers(users) { localStorage.setItem("users", JSON.stringify(users)); }
 
   function register() {
     let user = document.getElementById("registerUser").value.trim();
     let pass = document.getElementById("registerPass").value.trim();
-    if(!user || !pass){ alert("Remplis tous les champs"); return; }
+    if(!user||!pass){alert("Remplis tous les champs"); return;}
     let users = getUsers();
-    if(users[user]){ alert("Utilisateur déjà existant"); return; }
-    users[user] = pass; saveUsers(users);
-    alert("Compte créé !"); showLogin();
+    if(users[user]){alert("Utilisateur déjà existant"); return;}
+    users[user]=pass; saveUsers(users); alert("Compte créé !"); showLogin();
   }
 
   function login() {
-    let user = document.getElementById("loginUser").value.trim();
-    let pass = document.getElementById("loginPass").value.trim();
-    let users = getUsers();
-    if(users[user] && users[user] === pass){
+    let user=document.getElementById("loginUser").value.trim();
+    let pass=document.getElementById("loginPass").value.trim();
+    let users=getUsers();
+    if(users[user] && users[user]===pass){
       document.getElementById("loginPage").style.display="none";
       document.getElementById("mainSite").style.display="block";
       document.getElementById("userDisplay").innerText="Connecté en tant que : "+user;
-    } else { alert("Identifiants incorrects"); }
+    }else{alert("Identifiants incorrects");}
   }
 
-  function logout() {
+  function logout(){
     document.getElementById("mainSite").style.display="none";
     document.getElementById("loginPage").style.display="flex";
   }
 
-  function showRegister(){ document.getElementById("loginPage").style.display="none"; document.getElementById("registerPage").style.display="flex"; }
-  function showLogin(){ document.getElementById("registerPage").style.display="none"; document.getElementById("loginPage").style.display="flex"; }
-  function showPage(pageId){ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(pageId).classList.add("active"); }
+  function showRegister(){document.getElementById("loginPage").style.display="none"; document.getElementById("registerPage").style.display="flex";}
+  function showLogin(){document.getElementById("registerPage").style.display="none"; document.getElementById("loginPage").style.display="flex";}
+  function showPage(pageId){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(pageId).classList.add("active");}
 </script>
 
-<!-- 🔹 Firebase pour chat interne -->
+<!-- Firebase Chat entre collègues -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -179,7 +125,7 @@
     authDomain: "contenaires-it.firebaseapp.com",
     databaseURL: "https://contenaires-it-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "contenaires-it",
-    storageBucket: "contenaires-it.firebasestorage.app",
+    storageBucket: "contenaires-it.appspot.com",
     messagingSenderId: "227255285917",
     appId: "1:227255285917:web:c89ed24a70214bed727c74"
   };
@@ -188,48 +134,46 @@
   const db = getDatabase(app);
 
   const input = document.getElementById("msgInput");
-  const chatBtn = document.getElementById("sendMsgBtn");
+  const chatBtn = document.getElementById("chatBtn");
   const messagesDiv = document.getElementById("messages");
 
-  function sendMsg(){
-    const user = document.getElementById("userDisplay").innerText.replace("Connecté en tant que : ","") || "Invité";
+  chatBtn.addEventListener("click", ()=>{
+    const user = document.getElementById("userDisplay").innerText.replace("Connecté en tant que : ","")||"Invité";
     const text = input.value.trim(); if(!text) return;
-    push(ref(db, "messages"), { user, text });
-    input.value = "";
-  }
+    push(ref(db,"messages"), {user, text}); input.value="";
+  });
 
-  chatBtn.addEventListener("click", sendMsg);
-
-  onChildAdded(ref(db, "messages"), snapshot=>{
-    const data = snapshot.val(); if(!data) return;
-    messagesDiv.innerHTML += `<div><b>${data.user}:</b> ${data.text}</div>`;
+  onChildAdded(ref(db,"messages"), snapshot=>{
+    const data=snapshot.val();
+    if(!data) return;
+    messagesDiv.innerHTML+=`<div><b>${data.user}:</b> ${data.text}</div>`;
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   });
 </script>
 
-<!-- 🔹 Chat IA -->
+<!-- Chat IA -->
 <script>
-  async function sendAI() {
+  async function sendAI(){
     const aiInput = document.getElementById("aiInput");
     const aiMessages = document.getElementById("aiMessages");
     const text = aiInput.value.trim();
     if(!text) return;
 
-    aiMessages.innerHTML += `<div><b>Toi:</b> ${text}</div>`;
+    aiMessages.innerHTML+=`<div><b>Toi:</b> ${text}</div>`;
     aiMessages.scrollTop = aiMessages.scrollHeight;
-    aiInput.value = "";
+    aiInput.value="";
 
-    try {
-      const response = await fetch("/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text })
+    try{
+      const response = await fetch("/chat",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({message:text})
       });
       const data = await response.json();
-      aiMessages.innerHTML += `<div><b>IA:</b> ${data.reply}</div>`;
+      aiMessages.innerHTML+=`<div><b>IA:</b> ${data.reply}</div>`;
       aiMessages.scrollTop = aiMessages.scrollHeight;
-    } catch(err) {
-      aiMessages.innerHTML += `<div><b>IA:</b> Une erreur est survenue 😢</div>`;
+    }catch(err){
+      aiMessages.innerHTML+=`<div><b>IA:</b> Une erreur est survenue 😢</div>`;
       aiMessages.scrollTop = aiMessages.scrollHeight;
       console.error(err);
     }
