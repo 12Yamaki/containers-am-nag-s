@@ -1,11 +1,21 @@
 import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
+import path from "path";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Servir les fichiers front
+app.use(express.static(path.join(process.cwd(), "public")));
+
+// Route par défaut
+app.get("/", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "public", "index.html"));
+});
+
+// Route IA
 app.post("/chat", async (req, res) => {
   const userMessage = req.body.message;
   if (!userMessage) return res.status(400).json({ reply: "Message vide !" });
@@ -32,5 +42,5 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Serveur IA lancé sur le port ${PORT}`));
