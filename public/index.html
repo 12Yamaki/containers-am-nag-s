@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Chat Employés</title>
+  <title>Chat Employés + IA</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -59,12 +59,7 @@
       color: white;
       cursor: pointer;
     }
-    .page {
-      display: none;
-      padding: 20px;
-      background: white;
-      min-height: calc(100vh - 50px);
-    }
+    .page { display: none; padding: 20px; background: white; min-height: calc(100vh - 50px); }
     .active { display: block; }
     #messages, #aiMessages {
       height: 250px;
@@ -121,15 +116,15 @@
     <p id="userDisplay"></p>
   </div>
 
-  <!-- PAGE CHAT -->
+  <!-- CHAT EMPLOYÉS -->
   <div id="chat" class="page">
-    <h2>Communication</h2>
+    <h2>Communication Employés</h2>
     <div id="messages"></div>
     <input id="msgInput" placeholder="Écris un message">
-    <button>Envoyer</button>
+    <button id="sendMsgBtn">Envoyer</button>
   </div>
 
-  <!-- PAGE IA -->
+  <!-- CHAT IA -->
   <div id="ai" class="page">
     <h2>Assistant IA</h2>
     <div id="aiMessages"></div>
@@ -139,16 +134,16 @@
 </div>
 
 <script>
-  // Gestion des utilisateurs
+  // 🔹 Gestion des utilisateurs
   function getUsers() { return JSON.parse(localStorage.getItem("users") || "{}"); }
   function saveUsers(users) { localStorage.setItem("users", JSON.stringify(users)); }
 
   function register() {
     let user = document.getElementById("registerUser").value.trim();
     let pass = document.getElementById("registerPass").value.trim();
-    if(!user || !pass) { alert("Remplis tous les champs"); return; }
+    if(!user || !pass){ alert("Remplis tous les champs"); return; }
     let users = getUsers();
-    if(users[user]) { alert("Utilisateur déjà existant"); return; }
+    if(users[user]){ alert("Utilisateur déjà existant"); return; }
     users[user] = pass; saveUsers(users);
     alert("Compte créé !"); showLogin();
   }
@@ -157,7 +152,7 @@
     let user = document.getElementById("loginUser").value.trim();
     let pass = document.getElementById("loginPass").value.trim();
     let users = getUsers();
-    if(users[user] && users[user] === pass) {
+    if(users[user] && users[user] === pass){
       document.getElementById("loginPage").style.display="none";
       document.getElementById("mainSite").style.display="block";
       document.getElementById("userDisplay").innerText="Connecté en tant que : "+user;
@@ -169,22 +164,51 @@
     document.getElementById("loginPage").style.display="flex";
   }
 
-  function showRegister() { document.getElementById("loginPage").style.display="none"; document.getElementById("registerPage").style.display="flex"; }
-  function showLogin() { document.getElementById("registerPage").style.display="none"; document.getElementById("loginPage").style.display="flex"; }
-  function showPage(pageId) { document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(pageId).classList.add("active"); }
+  function showRegister(){ document.getElementById("loginPage").style.display="none"; document.getElementById("registerPage").style.display="flex"; }
+  function showLogin(){ document.getElementById("registerPage").style.display="none"; document.getElementById("loginPage").style.display="flex"; }
+  function showPage(pageId){ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(pageId).classList.add("active"); }
+</script>
 
-  // CHAT local
+<!-- 🔹 Firebase pour chat interne -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBlQw4vMAqGU4Ii8ShHptQOqMvfnoXqBdA",
+    authDomain: "contenaires-it.firebaseapp.com",
+    databaseURL: "https://contenaires-it-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "contenaires-it",
+    storageBucket: "contenaires-it.firebasestorage.app",
+    messagingSenderId: "227255285917",
+    appId: "1:227255285917:web:c89ed24a70214bed727c74"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
   const input = document.getElementById("msgInput");
-  const chatBtn = document.querySelector("#chat button");
+  const chatBtn = document.getElementById("sendMsgBtn");
   const messagesDiv = document.getElementById("messages");
 
-  chatBtn.addEventListener("click", ()=>{
-    const user = document.getElementById("userDisplay").innerText.replace("Connecté en tant que : ","")||"Invité";
-    const text = input.value.trim(); if(!text)return;
-    messagesDiv.innerHTML+=`<div><b>${user}:</b> ${text}</div>`; input.value="";
-  });
+  function sendMsg(){
+    const user = document.getElementById("userDisplay").innerText.replace("Connecté en tant que : ","") || "Invité";
+    const text = input.value.trim(); if(!text) return;
+    push(ref(db, "messages"), { user, text });
+    input.value = "";
+  }
 
-  // CHAT IA
+  chatBtn.addEventListener("click", sendMsg);
+
+  onChildAdded(ref(db, "messages"), snapshot=>{
+    const data = snapshot.val(); if(!data) return;
+    messagesDiv.innerHTML += `<div><b>${data.user}:</b> ${data.text}</div>`;
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  });
+</script>
+
+<!-- 🔹 Chat IA -->
+<script>
   async function sendAI() {
     const aiInput = document.getElementById("aiInput");
     const aiMessages = document.getElementById("aiMessages");
@@ -196,7 +220,7 @@
     aiInput.value = "";
 
     try {
-      const response = await fetch("/chat", { 
+      const response = await fetch("/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text })
