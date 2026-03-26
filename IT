@@ -10,14 +10,12 @@
       margin: 0;
       height: 100vh;
     }
-
     .container {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
-
     .box {
       background: white;
       padding: 30px;
@@ -26,7 +24,6 @@
       text-align: center;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
-
     input {
       width: 100%;
       padding: 10px;
@@ -34,7 +31,6 @@
       border-radius: 8px;
       border: 1px solid #ccc;
     }
-
     button {
       width: 100%;
       padding: 10px;
@@ -45,59 +41,42 @@
       font-size: 16px;
       cursor: pointer;
     }
-
     .link {
       margin-top: 10px;
       display: block;
       color: #667eea;
       cursor: pointer;
     }
-
     nav {
       background: #333;
       padding: 10px;
       display: flex;
       justify-content: space-around;
     }
-
     nav button {
       background: none;
       border: none;
       color: white;
       cursor: pointer;
     }
-
     .page {
       display: none;
       padding: 20px;
       background: white;
       min-height: calc(100vh - 50px);
     }
-
-    .active {
-      display: block;
-    }
-
-    #messages {
+    .active { display: block; }
+    #messages, #aiMessages {
       height: 250px;
       overflow-y: auto;
       border: 1px solid #ccc;
       padding: 10px;
       margin-bottom: 10px;
     }
-
-    #msgInput {
-      width: 70%;
-      padding: 5px;
-    }
-
-    #chat button {
-      width: 28%;
-      padding: 5px;
-    }
+    #msgInput, #aiInput { width: 70%; padding: 5px; }
+    #chat button, #ai button { width: 28%; padding: 5px; }
   </style>
 </head>
-
 <body>
 
 <!-- CONNEXION -->
@@ -124,7 +103,6 @@
 
 <!-- SITE -->
 <div id="mainSite" style="display:none;">
-
   <nav>
     <button onclick="showPage('home')">Accueil</button>
     <button onclick="showPage('profile')">Profil</button>
@@ -154,126 +132,84 @@
   <!-- PAGE IA -->
   <div id="ai" class="page">
     <h2>Assistant IA</h2>
-
-    <div id="aiMessages" style="height:250px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px;"></div>
-
-    <input id="aiInput" placeholder="Pose ta question..." style="width:70%; padding:5px;">
+    <div id="aiMessages"></div>
+    <input id="aiInput" placeholder="Pose ta question...">
     <button onclick="sendAI()">Envoyer</button>
   </div>
-
 </div>
 
 <script>
-  function getUsers() {
-    return JSON.parse(localStorage.getItem("users") || "{}");
-  }
-  function saveUsers(users) {
-    localStorage.setItem("users", JSON.stringify(users));
-  }
+  // Gestion des utilisateurs
+  function getUsers() { return JSON.parse(localStorage.getItem("users") || "{}"); }
+  function saveUsers(users) { localStorage.setItem("users", JSON.stringify(users)); }
 
   function register() {
     let user = document.getElementById("registerUser").value.trim();
     let pass = document.getElementById("registerPass").value.trim();
-    if (!user || !pass) { alert("Remplis tous les champs"); return; }
-
+    if(!user || !pass) { alert("Remplis tous les champs"); return; }
     let users = getUsers();
-    if (users[user]) { alert("Utilisateur déjà existant"); return; }
-
-    users[user] = pass;
-    saveUsers(users);
-    alert("Compte créé !");
-    showLogin();
+    if(users[user]) { alert("Utilisateur déjà existant"); return; }
+    users[user] = pass; saveUsers(users);
+    alert("Compte créé !"); showLogin();
   }
 
   function login() {
     let user = document.getElementById("loginUser").value.trim();
     let pass = document.getElementById("loginPass").value.trim();
     let users = getUsers();
-
-    if (users[user] && users[user] === pass) {
-      document.getElementById("loginPage").style.display = "none";
-      document.getElementById("mainSite").style.display = "block";
-      document.getElementById("userDisplay").innerText = "Connecté en tant que : " + user;
+    if(users[user] && users[user] === pass) {
+      document.getElementById("loginPage").style.display="none";
+      document.getElementById("mainSite").style.display="block";
+      document.getElementById("userDisplay").innerText="Connecté en tant que : "+user;
     } else { alert("Identifiants incorrects"); }
   }
 
   function logout() {
-    document.getElementById("mainSite").style.display = "none";
-    document.getElementById("loginPage").style.display = "flex";
+    document.getElementById("mainSite").style.display="none";
+    document.getElementById("loginPage").style.display="flex";
   }
 
-  function showRegister() {
-    document.getElementById("loginPage").style.display = "none";
-    document.getElementById("registerPage").style.display = "flex";
-  }
+  function showRegister() { document.getElementById("loginPage").style.display="none"; document.getElementById("registerPage").style.display="flex"; }
+  function showLogin() { document.getElementById("registerPage").style.display="none"; document.getElementById("loginPage").style.display="flex"; }
+  function showPage(pageId) { document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(pageId).classList.add("active"); }
 
-  function showLogin() {
-    document.getElementById("registerPage").style.display = "none";
-    document.getElementById("loginPage").style.display = "flex";
-  }
-
-  function showPage(pageId) {
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-    document.getElementById(pageId).classList.add("active");
-  }
-
-  // IA FAKE (test)
-  function sendAI() {
-    const input = document.getElementById("aiInput");
-    const messages = document.getElementById("aiMessages");
-
-    const text = input.value.trim();
-    if (!text) return;
-
-    messages.innerHTML += `<div><b>Toi:</b> ${text}</div>`;
-
-    setTimeout(() => {
-      messages.innerHTML += `<div><b>IA:</b> Je réfléchis encore 😅</div>`;
-      messages.scrollTop = messages.scrollHeight;
-    }, 500);
-
-    input.value = "";
-  }
-</script>
-
-<!-- Firebase -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBlQw4vMAqGU4Ii8ShHptQOqMvfnoXqBdA",
-    authDomain: "contenaires-it.firebaseapp.com",
-    databaseURL: "https://contenaires-it-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "contenaires-it",
-    storageBucket: "contenaires-it.firebasestorage.app",
-    messagingSenderId: "227255285917",
-    appId: "1:227255285917:web:c89ed24a70214bed727c74"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
+  // CHAT Firebase (inchangé)
   const input = document.getElementById("msgInput");
   const chatBtn = document.querySelector("#chat button");
   const messagesDiv = document.getElementById("messages");
 
-  function sendMsg() {
-    const user = document.getElementById("userDisplay").innerText.replace("Connecté en tant que : ","") || "Invité";
-    const text = input.value.trim();
-    if(!text) return;
-    push(ref(db, "messages"), { user, text });
-    input.value = "";
-  }
-
-  chatBtn.addEventListener("click", sendMsg);
-
-  onChildAdded(ref(db, "messages"), snapshot => {
-    const data = snapshot.val();
-    if (!data) return;
-    messagesDiv.innerHTML += `<div><b>${data.user}:</b> ${data.text}</div>`;
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  chatBtn.addEventListener("click",()=>{
+    const user = document.getElementById("userDisplay").innerText.replace("Connecté en tant que : ","")||"Invité";
+    const text = input.value.trim(); if(!text)return;
+    messagesDiv.innerHTML+=`<div><b>${user}:</b> ${text}</div>`; input.value="";
   });
+
+  // CHAT IA (Render H24)
+  async function sendAI() {
+    const aiInput = document.getElementById("aiInput");
+    const aiMessages = document.getElementById("aiMessages");
+    const text = aiInput.value.trim();
+    if(!text) return;
+
+    aiMessages.innerHTML += `<div><b>Toi:</b> ${text}</div>`;
+    aiMessages.scrollTop = aiMessages.scrollHeight;
+    aiInput.value = "";
+
+    try {
+      const response = await fetch("https://containers-amenages.onrender.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: text })
+      });
+      const data = await response.json();
+      aiMessages.innerHTML += `<div><b>IA:</b> ${data.response}</div>`;
+      aiMessages.scrollTop = aiMessages.scrollHeight;
+    } catch(err) {
+      aiMessages.innerHTML += `<div><b>IA:</b> Une erreur est survenue 😢</div>`;
+      aiMessages.scrollTop = aiMessages.scrollHeight;
+      console.error(err);
+    }
+  }
 </script>
 
 </body>
