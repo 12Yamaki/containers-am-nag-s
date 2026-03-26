@@ -11,10 +11,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 1️⃣ Servir tous les fichiers statiques du dossier public
+// Servir les fichiers statiques
 app.use(express.static(path.join(__dirname, "public")));
 
-// 2️⃣ Route IA pour ton chat IA
+// Route IA
 app.post("/chat", async (req, res) => {
   const userMessage = req.body.message;
   if (!userMessage) return res.status(400).json({ reply: "Message vide !" });
@@ -28,20 +28,24 @@ app.post("/chat", async (req, res) => {
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: userMessage }]
+        messages: [{ role: "user", content: userMessage }],
+        max_tokens: 200,
+        temperature: 0.7
       })
     });
 
     const data = await response.json();
-    const reply = data.choices?.[0]?.message?.content || "Pas de réponse.";
+    console.log("Réponse OpenAI:", data); // 🔍 pour debug
+
+    const reply = data?.choices?.[0]?.message?.content?.trim() || "Pas de réponse.";
     res.json({ reply });
   } catch (err) {
-    console.error(err);
+    console.error("Erreur serveur IA:", err);
     res.status(500).json({ reply: "Erreur serveur IA." });
   }
 });
 
-// 3️⃣ Toujours renvoyer index.html pour toutes les autres routes
+// Renvoyer index.html pour toutes les autres routes
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
