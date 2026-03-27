@@ -16,10 +16,9 @@ app.post("/chat", async (req, res) => {
   const userMessage = req.body.message;
   if (!userMessage) return res.status(400).json({ reply: "Message vide !" });
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = "AIzaSyAE_I9csyHDhhUtE9JYnCk5BcxXcUF6HRo";
 
   try {
-    // Changement ici : on utilise gemini-1.5-flash-latest
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -31,14 +30,13 @@ app.post("/chat", async (req, res) => {
     const data = await response.json();
     
     if (data.error) {
-        console.error("Erreur détaillée Google API:", JSON.stringify(data.error, null, 2));
-        return res.status(500).json({ reply: "L'IA a un petit souci technique, réessaie." });
+        console.error("Erreur Google:", data.error);
+        return res.status(500).json({ reply: "Erreur API Google (Vérifie ta clé)." });
     }
 
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "L'IA n'a pas pu répondre.";
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "L'IA est indisponible.";
     res.json({ reply });
   } catch (err) {
-    console.error("Erreur Serveur:", err);
     res.status(500).json({ reply: "Erreur connexion serveur." });
   }
 });
@@ -48,4 +46,4 @@ app.get("*", (req, res) => {
 });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Serveur IA prêt sur le port ${PORT}`));
+app.listen(PORT, () => console.log(`Serveur prêt sur le port ${PORT}`));
