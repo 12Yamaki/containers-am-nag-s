@@ -16,7 +16,8 @@ app.post("/chat", async (req, res) => {
   const userMessage = req.body.message;
   if (!userMessage) return res.status(400).json({ reply: "Message vide !" });
 
-  const apiKey = "AIzaSyAE_I9csyHDhhUtE9JYnCk5BcxXcUF6HRo";
+  // CETTE LIGNE VA LIRE TA CLÉ SUR RENDER DIRECTEMENT
+  const apiKey = process.env.GEMINI_API_KEY;
 
   try {
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
@@ -28,10 +29,18 @@ app.post("/chat", async (req, res) => {
     });
 
     const data = await response.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "L'IA est indisponible pour le moment.";
+    
+    // Si Google renvoie une erreur, on l'affiche dans les logs Render
+    if (data.error) {
+        console.error("Erreur Google API:", data.error);
+        return res.status(500).json({ reply: "Erreur de clé API Google." });
+    }
+
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "L'IA est indisponible.";
     res.json({ reply });
   } catch (err) {
-    res.status(500).json({ reply: "Erreur serveur IA (Gratuit)." });
+    console.error("Erreur Serveur:", err);
+    res.status(500).json({ reply: "Erreur connexion serveur." });
   }
 });
 
@@ -39,6 +48,5 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Serveur IA Gratuit lancé sur le port ${PORT}`));
-
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`Serveur IA prêt sur le port ${PORT}`));
