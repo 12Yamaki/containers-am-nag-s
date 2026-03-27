@@ -14,14 +14,13 @@
     nav button { background:none; border:none; color:white; cursor:pointer; }
     .page { display:none; padding:20px; background:white; min-height:calc(100vh - 50px); }
     .active { display:block; }
-    #messages, #aiMessages { height:250px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px; }
+    #messages, #aiMessages { height:250px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px; text-align: left; }
     #msgInput, #aiInput { width:70%; padding:5px; }
     #chat button, #ai button { width:28%; padding:5px; }
   </style>
 </head>
 <body>
 
-<!-- CONNEXION -->
 <div id="loginPage" class="container">
   <div class="box">
     <h2>Connexion</h2>
@@ -32,7 +31,6 @@
   </div>
 </div>
 
-<!-- INSCRIPTION -->
 <div id="registerPage" class="container" style="display:none;">
   <div class="box">
     <h2>Inscription</h2>
@@ -43,7 +41,6 @@
   </div>
 </div>
 
-<!-- SITE -->
 <div id="mainSite" style="display:none;">
   <nav>
     <button onclick="showPage('home')">Accueil</button>
@@ -63,7 +60,6 @@
     <p id="userDisplay"></p>
   </div>
 
-  <!-- CHAT ENTRE COLLÈGUES -->
   <div id="chat" class="page">
     <h2>Communication</h2>
     <div id="messages"></div>
@@ -71,7 +67,6 @@
     <button id="chatBtn">Envoyer</button>
   </div>
 
-  <!-- CHAT IA -->
   <div id="ai" class="page">
     <h2>Assistant IA</h2>
     <div id="aiMessages"></div>
@@ -81,7 +76,6 @@
 </div>
 
 <script>
-  // Gestion des utilisateurs (localStorage)
   function getUsers() { return JSON.parse(localStorage.getItem("users")||"{}"); }
   function saveUsers(users) { localStorage.setItem("users", JSON.stringify(users)); }
 
@@ -113,9 +107,18 @@
   function showRegister(){document.getElementById("loginPage").style.display="none"; document.getElementById("registerPage").style.display="flex";}
   function showLogin(){document.getElementById("registerPage").style.display="none"; document.getElementById("loginPage").style.display="flex";}
   function showPage(pageId){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(pageId).classList.add("active");}
+
+  // Ajout de la touche Entrée pour l'IA
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("aiInput").addEventListener("keypress", (e) => {
+        if(e.key === "Enter") sendAI();
+    });
+    document.getElementById("msgInput").addEventListener("keypress", (e) => {
+        if(e.key === "Enter") document.getElementById("chatBtn").click();
+    });
+  });
 </script>
 
-<!-- Firebase Chat entre collègues -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -138,7 +141,8 @@
   const messagesDiv = document.getElementById("messages");
 
   chatBtn.addEventListener("click", ()=>{
-    const user = document.getElementById("userDisplay").innerText.replace("Connecté en tant que : ","")||"Invité";
+    const userDisplay = document.getElementById("userDisplay").innerText;
+    const user = userDisplay ? userDisplay.replace("Connecté en tant que : ","") : "Invité";
     const text = input.value.trim(); if(!text) return;
     push(ref(db,"messages"), {user, text}); input.value="";
   });
@@ -151,7 +155,6 @@
   });
 </script>
 
-<!-- Chat IA -->
 <script>
   async function sendAI(){
     const aiInput = document.getElementById("aiInput");
@@ -163,19 +166,19 @@
     aiMessages.scrollTop = aiMessages.scrollHeight;
     aiInput.value="";
 
-    try{
-      const response = await fetch("/chat",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({message:text})
+    try {
+      // fetch("/chat") fonctionne si ton HTML est servi par le serveur Node.js
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
       });
       const data = await response.json();
       aiMessages.innerHTML+=`<div><b>IA:</b> ${data.reply}</div>`;
       aiMessages.scrollTop = aiMessages.scrollHeight;
-    }catch(err){
-      aiMessages.innerHTML+=`<div><b>IA:</b> Une erreur est survenue 😢</div>`;
+    } catch(err) {
+      aiMessages.innerHTML+=`<div><b>IA:</b> Erreur de connexion au serveur 😢</div>`;
       aiMessages.scrollTop = aiMessages.scrollHeight;
-      console.error(err);
     }
   }
 </script>
