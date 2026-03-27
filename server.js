@@ -16,11 +16,11 @@ app.post("/chat", async (req, res) => {
   const userMessage = req.body.message;
   if (!userMessage) return res.status(400).json({ reply: "Message vide !" });
 
-  // CETTE LIGNE VA LIRE TA CLÉ SUR RENDER DIRECTEMENT
   const apiKey = process.env.GEMINI_API_KEY;
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    // Changement ici : on utilise gemini-1.5-flash-latest
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -30,13 +30,12 @@ app.post("/chat", async (req, res) => {
 
     const data = await response.json();
     
-    // Si Google renvoie une erreur, on l'affiche dans les logs Render
     if (data.error) {
-        console.error("Erreur Google API:", data.error);
-        return res.status(500).json({ reply: "Erreur de clé API Google." });
+        console.error("Erreur détaillée Google API:", JSON.stringify(data.error, null, 2));
+        return res.status(500).json({ reply: "L'IA a un petit souci technique, réessaie." });
     }
 
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "L'IA est indisponible.";
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "L'IA n'a pas pu répondre.";
     res.json({ reply });
   } catch (err) {
     console.error("Erreur Serveur:", err);
