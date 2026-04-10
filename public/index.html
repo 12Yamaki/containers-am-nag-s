@@ -1,187 +1,34 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Chat Employés</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: linear-gradient(135deg, #667eea, #764ba2); margin:0; height:100vh; }
-    .container { display:flex; justify-content:center; align-items:center; height:100vh; }
-    .box { background:white; padding:30px; border-radius:15px; width:320px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.2); }
-    input { width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; }
-    button { width:100%; padding:10px; border:none; border-radius:8px; background:#667eea; color:white; font-size:16px; cursor:pointer; }
-    .link { margin-top:10px; display:block; color:#667eea; cursor:pointer; }
-    nav { background:#333; padding:10px; display:flex; justify-content:space-around; }
-    nav button { background:none; border:none; color:white; cursor:pointer; }
-    .page { display:none; padding:20px; background:white; min-height:calc(100vh - 50px); }
-    .active { display:block; }
-    #messages, #aiMessages { height:250px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px; text-align: left; }
-    #msgInput, #aiInput { width:70%; padding:5px; }
-    #chat button, #ai button { width:28%; padding:5px; }
-  </style>
-</head>
-<body>
+<div id="profile" class="page">
+    <h2>Tableau de Bord Énergétique</h2>
+    <div id="userDisplay" style="font-weight: bold; margin-bottom: 20px;"></div>
 
-<div id="loginPage" class="container">
-  <div class="box">
-    <h2>Connexion</h2>
-    <input type="text" id="loginUser" placeholder="Nom d'utilisateur">
-    <input type="password" id="loginPass" placeholder="Mot de passe">
-    <button onclick="login()">Se connecter</button>
-    <span class="link" onclick="showRegister()">Créer un compte</span>
-  </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div style="border: 1px solid #ddd; padding: 15px; border-radius: 10px; background: #e3f2fd;">
+            <h3>💧 Eau</h3>
+            <p>Consommation : <b>45L / jour</b></p>
+            <div style="background: #ccc; height: 10px; border-radius: 5px;">
+                <div style="background: #2196f3; width: 60%; height: 100%; border-radius: 5px;"></div>
+            </div>
+            <p><small>Objectif : 40L</small></p>
+        </div>
+
+        <div style="border: 1px solid #ddd; padding: 15px; border-radius: 10px; background: #fff3e0;">
+            <h3>⚡ Électricité</h3>
+            <p>Consommation : <b>2.4 kWh</b></p>
+            <div style="background: #ccc; height: 10px; border-radius: 5px;">
+                <div style="background: #ff9800; width: 75%; height: 100%; border-radius: 5px;"></div>
+            </div>
+            <p><small>Pic à 14h00</small></p>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; border: 1px solid #ddd; padding: 15px; border-radius: 10px; background: #f1f8e9;">
+        <h3>🌡️ Gestion Thermique</h3>
+        <p>Température actuelle : <b>19°C</b></p>
+        <p>Statut Radiateur : <span style="color: green; font-weight: bold;">OPTIMAL</span></p>
+        <hr>
+        <h4>💡 Conseils du jour</h4>
+        <ul id="ecoTips" style="text-align: left; list-style: none; padding: 0;">
+            </ul>
+    </div>
 </div>
-
-<div id="registerPage" class="container" style="display:none;">
-  <div class="box">
-    <h2>Inscription</h2>
-    <input type="text" id="registerUser" placeholder="Nom d'utilisateur">
-    <input type="password" id="registerPass" placeholder="Mot de passe">
-    <button onclick="register()">S'inscrire</button>
-    <span class="link" onclick="showLogin()">Déjà un compte ?</span>
-  </div>
-</div>
-
-<div id="mainSite" style="display:none;">
-  <nav>
-    <button onclick="showPage('home')">Accueil</button>
-    <button onclick="showPage('profile')">Profil</button>
-    <button onclick="showPage('chat')">Chat</button>
-    <button onclick="showPage('ai')">IA</button>
-    <button onclick="logout()">Déconnexion</button>
-  </nav>
-
-  <div id="home" class="page active">
-    <h2>Accueil</h2>
-    <p>Bienvenue sur le chat interne !</p>
-  </div>
-
-  <div id="profile" class="page">
-    <h2>Profil</h2>
-    <p id="userDisplay"></p>
-  </div>
-
-  <div id="chat" class="page">
-    <h2>Communication</h2>
-    <div id="messages"></div>
-    <input id="msgInput" placeholder="Écris un message">
-    <button id="chatBtn">Envoyer</button>
-  </div>
-
-  <div id="ai" class="page">
-    <h2>Assistant IA</h2>
-    <div id="aiMessages"></div>
-    <input id="aiInput" placeholder="Pose ta question...">
-    <button onclick="sendAI()">Envoyer</button>
-  </div>
-</div>
-
-<script>
-  function getUsers() { return JSON.parse(localStorage.getItem("users")||"{}"); }
-  function saveUsers(users) { localStorage.setItem("users", JSON.stringify(users)); }
-
-  function register() {
-    let user = document.getElementById("registerUser").value.trim();
-    let pass = document.getElementById("registerPass").value.trim();
-    if(!user||!pass){alert("Remplis tous les champs"); return;}
-    let users = getUsers();
-    if(users[user]){alert("Utilisateur déjà existant"); return;}
-    users[user]=pass; saveUsers(users); alert("Compte créé !"); showLogin();
-  }
-
-  function login() {
-    let user=document.getElementById("loginUser").value.trim();
-    let pass=document.getElementById("loginPass").value.trim();
-    let users=getUsers();
-    if(users[user] && users[user]===pass){
-      document.getElementById("loginPage").style.display="none";
-      document.getElementById("mainSite").style.display="block";
-      document.getElementById("userDisplay").innerText="Connecté en tant que : "+user;
-    }else{alert("Identifiants incorrects");}
-  }
-
-  function logout(){
-    document.getElementById("mainSite").style.display="none";
-    document.getElementById("loginPage").style.display="flex";
-  }
-
-  function showRegister(){document.getElementById("loginPage").style.display="none"; document.getElementById("registerPage").style.display="flex";}
-  function showLogin(){document.getElementById("registerPage").style.display="none"; document.getElementById("loginPage").style.display="flex";}
-  function showPage(pageId){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(pageId).classList.add("active");}
-
-  // Ajout de la touche Entrée pour l'IA
-  document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("aiInput").addEventListener("keypress", (e) => {
-        if(e.key === "Enter") sendAI();
-    });
-    document.getElementById("msgInput").addEventListener("keypress", (e) => {
-        if(e.key === "Enter") document.getElementById("chatBtn").click();
-    });
-  });
-</script>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBlQw4vMAqGU4Ii8ShHptQOqMvfnoXqBdA",
-    authDomain: "contenaires-it.firebaseapp.com",
-    databaseURL: "https://contenaires-it-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "contenaires-it",
-    storageBucket: "contenaires-it.appspot.com",
-    messagingSenderId: "227255285917",
-    appId: "1:227255285917:web:c89ed24a70214bed727c74"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  const input = document.getElementById("msgInput");
-  const chatBtn = document.getElementById("chatBtn");
-  const messagesDiv = document.getElementById("messages");
-
-  chatBtn.addEventListener("click", ()=>{
-    const userDisplay = document.getElementById("userDisplay").innerText;
-    const user = userDisplay ? userDisplay.replace("Connecté en tant que : ","") : "Invité";
-    const text = input.value.trim(); if(!text) return;
-    push(ref(db,"messages"), {user, text}); input.value="";
-  });
-
-  onChildAdded(ref(db,"messages"), snapshot=>{
-    const data=snapshot.val();
-    if(!data) return;
-    messagesDiv.innerHTML+=`<div><b>${data.user}:</b> ${data.text}</div>`;
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  });
-</script>
-
-<script>
-  async function sendAI(){
-    const aiInput = document.getElementById("aiInput");
-    const aiMessages = document.getElementById("aiMessages");
-    const text = aiInput.value.trim();
-    if(!text) return;
-
-    aiMessages.innerHTML+=`<div><b>Toi:</b> ${text}</div>`;
-    aiMessages.scrollTop = aiMessages.scrollHeight;
-    aiInput.value="";
-
-    try {
-      // fetch("/chat") fonctionne si ton HTML est servi par le serveur Node.js
-      const response = await fetch("/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text })
-      });
-      const data = await response.json();
-      aiMessages.innerHTML+=`<div><b>IA:</b> ${data.reply}</div>`;
-      aiMessages.scrollTop = aiMessages.scrollHeight;
-    } catch(err) {
-      aiMessages.innerHTML+=`<div><b>IA:</b> Erreur de connexion au serveur 😢</div>`;
-      aiMessages.scrollTop = aiMessages.scrollHeight;
-    }
-  }
-</script>
-
-</body>
-</html>
