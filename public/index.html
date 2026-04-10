@@ -14,11 +14,11 @@
     nav button { background:none; border:none; color:white; cursor:pointer; }
     .page { display:none; padding:20px; background:white; min-height:calc(100vh - 50px); overflow-y: auto; }
     .active { display:block; }
-    #messages, #aiMessages { height:250px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px; text-align: left; }
-    #msgInput, #aiInput { width:70%; padding:5px; }
-    #chat button, #ai button { width:28%; padding:5px; }
+    #messages, #aiMessages, #botMessages { height:250px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px; text-align: left; }
+    #msgInput, #aiInput, #botInput { width:70%; padding:5px; }
+    #chat button, #ai button, #bot button { width:28%; padding:5px; }
 
-    /* Styles Profil Énergétique Interactif */
+    /* Styles Profil Énergétique */
     .energy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
     .card { border: 1px solid #ddd; padding: 15px; border-radius: 10px; text-align: left; position: relative; }
     .card input[type="number"] { width: 60px; padding: 5px; margin: 0; display: inline-block; }
@@ -29,6 +29,10 @@
     .device-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed #eee; }
     .device-item:last-child { border-bottom: none; }
     .device-item input { width: 50px !important; padding: 2px !important; margin: 0 !important; text-align: center; }
+
+    /* Style spécifique pour le robot */
+    .bot-intro { display: flex; align-items: center; background: #f0f4ff; padding: 10px; border-radius: 10px; margin-bottom: 15px; }
+    .bot-avatar { width: 50px; height: 50px; margin-right: 15px; border-radius: 50%; }
   </style>
 </head>
 <body>
@@ -58,6 +62,7 @@
     <button onclick="showPage('home')">Accueil</button>
     <button onclick="showPage('profile')">Profil</button>
     <button onclick="showPage('chat')">Chat</button>
+    <button onclick="showPage('bot')">Chatbot 🤖</button>
     <button onclick="showPage('ai')">IA</button>
     <button onclick="logout()">Déconnexion</button>
   </nav>
@@ -86,44 +91,12 @@
 
     <div class="devices-list">
         <h3>🔌 Détail par appareil (Consommation estimée)</h3>
-        
-        <div class="device-item">
-            <span>💻 Ordinateur Portable</span>
-            <div><input type="number" value="0.5" step="0.1"> kWh</div>
-        </div>
-        <div class="device-item">
-            <span>🔌 Prises secteur (Total)</span>
-            <div><input type="number" value="0.3" step="0.1"> kWh</div>
-        </div>
-        <div class="device-item">
-            <span>🧊 Frigo</span>
-            <div><input type="number" value="0.8" step="0.1"> kWh</div>
-        </div>
-        <div class="device-item">
-            <span>🚰 Robinet / Douche</span>
-            <div><input type="number" value="15"> Litres</div>
-        </div>
-        <div class="device-item">
-            <span>🌡️ Radiateur</span>
-            <div><input type="number" value="1.2" step="0.1"> kWh</div>
-        </div>
-        <div class="device-item">
-            <span>🔥 Chauffe-eau</span>
-            <div><input type="number" value="2.0" step="0.1"> kWh</div>
-        </div>
-    </div>
-
-    <div style="margin-top:20px; padding:15px; background:#f1f8e9; border-radius:10px; text-align:left;">
-        <h3>🌡️ Gestion Thermique</h3>
-        <p>Température recommandée : <strong>19°C</strong></p>
-        <p>Statut : <span style="color:green;">Optimisé</span></p>
-        <hr>
-        <h4>💡 Conseils Éco</h4>
-        <ul style="padding-left:20px;">
-            <li>Activer le chauffe-eau entre 22h et 6h.</li>
-            <li>Baisser le radiateur de 2°C lors de vos absences.</li>
-            <li>Utiliser la lumière naturelle autant que possible.</li>
-        </ul>
+        <div class="device-item"><span>💻 Ordinateur Portable</span><div><input type="number" value="0.5" step="0.1"> kWh</div></div>
+        <div class="device-item"><span>🔌 Prises secteur (Total)</span><div><input type="number" value="0.3" step="0.1"> kWh</div></div>
+        <div class="device-item"><span>🧊 Frigo</span><div><input type="number" value="0.8" step="0.1"> kWh</div></div>
+        <div class="device-item"><span>🚰 Robinet / Douche</span><div><input type="number" value="15"> Litres</div></div>
+        <div class="device-item"><span>🌡️ Radiateur</span><div><input type="number" value="1.2" step="0.1"> kWh</div></div>
+        <div class="device-item"><span>🔥 Chauffe-eau</span><div><input type="number" value="2.0" step="0.1"> kWh</div></div>
     </div>
   </div>
 
@@ -132,6 +105,21 @@
     <div id="messages"></div>
     <input id="msgInput" placeholder="Écris un message">
     <button id="chatBtn">Envoyer</button>
+  </div>
+
+  <div id="bot" class="page">
+    <div class="bot-intro">
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" class="bot-avatar" alt="Robot">
+        <div>
+            <h3 style="margin:0">Assistant Robot</h3>
+            <small>Je réponds à tes questions sur le site !</small>
+        </div>
+    </div>
+    <div id="botMessages">
+        <div><b>Robot:</b> Bonjour ! Je connais tout sur ce site. Pose-moi une question !</div>
+    </div>
+    <input id="botInput" placeholder="Ex: eau, profil, électricité...">
+    <button onclick="askBot()">Demander</button>
   </div>
 
   <div id="ai" class="page">
@@ -143,19 +131,57 @@
 </div>
 
 <script>
-  // Fonction pour mettre à jour les barres de progression en temps réel
+  // --- LOGIQUE DU CHATBOT (MOTS-CLÉS) ---
+  const botResponses = {
+    "bonjour": "Salut ! Comment puis-je t'aider aujourd'hui ?",
+    "coucou": "Coucou ! Prêt à surveiller ta consommation ?",
+    "profil": "Dans l'onglet 'Profil', tu peux voir tes jauges d'eau et d'électricité en temps réel.",
+    "eau": "On limite la consommation d'eau à 60 litres par session pour rester écolo !",
+    "elec": "L'électricité est limitée à 5 kWh. Fais attention aux appareils gourmands comme le radiateur !",
+    "électricité": "L'électricité est limitée à 5 kWh. Fais attention aux appareils gourmands comme le radiateur !",
+    "chat": "L'onglet 'Chat' te permet de discuter avec tous les autres employés connectés.",
+    "ia": "L'onglet 'IA' est mon grand frère intelligent, il peut répondre à des questions plus complexes.",
+    "robot": "C'est moi ! Je suis là pour t'expliquer comment marche le site.",
+    "radiateur": "Le radiateur consomme 1.2 kWh. Il est conseillé de rester à 19°C.",
+    "frigo": "Le frigo consomme environ 0.8 kWh de manière constante.",
+    "aide": "Je connais les mots : bonjour, profil, eau, elec, chat, ia, radiateur, frigo.",
+    "merci": "De rien ! À ton service ! 🤖"
+  };
+
+  function askBot() {
+    const input = document.getElementById("botInput");
+    const messages = document.getElementById("botMessages");
+    const text = input.value.toLowerCase().trim();
+    if(!text) return;
+
+    messages.innerHTML += `<div><b>Toi:</b> ${input.value}</div>`;
+    
+    let reply = "Désolé, je ne connais pas ce mot. Tape 'aide' pour voir ce que je sais !";
+    
+    // Parcours des mots-clés
+    for (let key in botResponses) {
+        if (text.includes(key)) {
+            reply = botResponses[key];
+            break;
+        }
+    }
+
+    setTimeout(() => {
+        messages.innerHTML += `<div style="color:#667eea"><b>Robot:</b> ${reply}</div>`;
+        messages.scrollTop = messages.scrollHeight;
+    }, 400);
+
+    input.value = "";
+  }
+
+  // --- RESTE DE TON CODE ORIGINAL ---
   function updateBars() {
       const eau = document.getElementById('valEau').value;
       const elec = document.getElementById('valElec').value;
-      
-      // Calcul des pourcentages (max 60L pour eau, 5kWh pour elec)
       const pEau = Math.min((eau / 60) * 100, 100);
       const pElec = Math.min((elec / 5) * 100, 100);
-      
       document.getElementById('barEau').style.width = pEau + '%';
       document.getElementById('barElec').style.width = pElec + '%';
-
-      // Changement de couleur si dépassement
       document.getElementById('barEau').style.background = pEau > 90 ? '#f44336' : '#2196f3';
       document.getElementById('barElec').style.background = pElec > 90 ? '#f44336' : '#ff9800';
   }
@@ -193,12 +219,9 @@
   function showPage(pageId){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(pageId).classList.add("active");}
 
   document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("aiInput").addEventListener("keypress", (e) => {
-        if(e.key === "Enter") sendAI();
-    });
-    document.getElementById("msgInput").addEventListener("keypress", (e) => {
-        if(e.key === "Enter") document.getElementById("chatBtn").click();
-    });
+    document.getElementById("botInput").addEventListener("keypress", (e) => { if(e.key === "Enter") askBot(); });
+    document.getElementById("aiInput").addEventListener("keypress", (e) => { if(e.key === "Enter") sendAI(); });
+    document.getElementById("msgInput").addEventListener("keypress", (e) => { if(e.key === "Enter") document.getElementById("chatBtn").click(); });
   });
 </script>
 
@@ -244,11 +267,9 @@
     const aiMessages = document.getElementById("aiMessages");
     const text = aiInput.value.trim();
     if(!text) return;
-
     aiMessages.innerHTML+=`<div><b>Toi:</b> ${text}</div>`;
     aiMessages.scrollTop = aiMessages.scrollHeight;
     aiInput.value="";
-
     try {
       const response = await fetch("/chat", {
         method: "POST",
