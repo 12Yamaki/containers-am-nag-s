@@ -12,17 +12,23 @@
     .link { margin-top:10px; display:block; color:#667eea; cursor:pointer; }
     nav { background:#333; padding:10px; display:flex; justify-content:space-around; }
     nav button { background:none; border:none; color:white; cursor:pointer; }
-    .page { display:none; padding:20px; background:white; min-height:calc(100vh - 50px); }
+    .page { display:none; padding:20px; background:white; min-height:calc(100vh - 50px); overflow-y: auto; }
     .active { display:block; }
     #messages, #aiMessages { height:250px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px; text-align: left; }
     #msgInput, #aiInput { width:70%; padding:5px; }
     #chat button, #ai button { width:28%; padding:5px; }
 
-    /* Styles ajoutés pour la partie Profil */
+    /* Styles Profil Énergétique Interactif */
     .energy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-    .card { border: 1px solid #ddd; padding: 15px; border-radius: 10px; text-align: left; }
-    .bar-bg { background: #eee; height: 10px; border-radius: 5px; margin-top: 5px; }
-    .bar-fill { height: 100%; border-radius: 5px; }
+    .card { border: 1px solid #ddd; padding: 15px; border-radius: 10px; text-align: left; position: relative; }
+    .card input[type="number"] { width: 60px; padding: 5px; margin: 0; display: inline-block; }
+    .bar-bg { background: #eee; height: 10px; border-radius: 5px; margin-top: 10px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 5px; transition: width 0.3s ease; }
+    
+    .devices-list { margin-top: 20px; text-align: left; background: #fdfdfd; border: 1px solid #eee; padding: 15px; border-radius: 10px; }
+    .device-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed #eee; }
+    .device-item:last-child { border-bottom: none; }
+    .device-item input { width: 50px !important; padding: 2px !important; margin: 0 !important; text-align: center; }
   </style>
 </head>
 <body>
@@ -62,24 +68,53 @@
   </div>
 
   <div id="profile" class="page">
-    <h2>Mon Profil Énergétique</h2>
+    <h2>Mon Profil Énergétique Interactif</h2>
     <p id="userDisplay" style="font-weight:bold; color:#667eea;"></p>
     
     <div class="energy-grid">
         <div class="card" style="background:#e3f2fd;">
-            <strong>💧 Eau</strong>
-            <p>45L / 60L</p>
-            <div class="bar-bg"><div class="bar-fill" style="width:75%; background:#2196f3;"></div></div>
+            <strong>💧 Eau (Litres)</strong>
+            <p><input type="number" id="valEau" value="45" oninput="updateBars()"> / 60L</p>
+            <div class="bar-bg"><div id="barEau" class="bar-fill" style="width:75%; background:#2196f3;"></div></div>
         </div>
         <div class="card" style="background:#fff3e0;">
-            <strong>⚡ Électricité</strong>
-            <p>2.4 kWh</p>
-            <div class="bar-bg"><div class="bar-fill" style="width:40%; background:#ff9800;"></div></div>
+            <strong>⚡ Électricité (kWh)</strong>
+            <p><input type="number" id="valElec" value="2.4" step="0.1" oninput="updateBars()"> / 5 kWh</p>
+            <div class="bar-bg"><div id="barElec" class="bar-fill" style="width:48%; background:#ff9800;"></div></div>
+        </div>
+    </div>
+
+    <div class="devices-list">
+        <h3>🔌 Détail par appareil (Consommation estimée)</h3>
+        
+        <div class="device-item">
+            <span>💻 Ordinateur Portable</span>
+            <div><input type="number" value="0.5" step="0.1"> kWh</div>
+        </div>
+        <div class="device-item">
+            <span>🔌 Prises secteur (Total)</span>
+            <div><input type="number" value="0.3" step="0.1"> kWh</div>
+        </div>
+        <div class="device-item">
+            <span>🧊 Frigo</span>
+            <div><input type="number" value="0.8" step="0.1"> kWh</div>
+        </div>
+        <div class="device-item">
+            <span>🚰 Robinet / Douche</span>
+            <div><input type="number" value="15"> Litres</div>
+        </div>
+        <div class="device-item">
+            <span>🌡️ Radiateur</span>
+            <div><input type="number" value="1.2" step="0.1"> kWh</div>
+        </div>
+        <div class="device-item">
+            <span>🔥 Chauffe-eau</span>
+            <div><input type="number" value="2.0" step="0.1"> kWh</div>
         </div>
     </div>
 
     <div style="margin-top:20px; padding:15px; background:#f1f8e9; border-radius:10px; text-align:left;">
-        <h3>🌡️ Gestion du Radiateur</h3>
+        <h3>🌡️ Gestion Thermique</h3>
         <p>Température recommandée : <strong>19°C</strong></p>
         <p>Statut : <span style="color:green;">Optimisé</span></p>
         <hr>
@@ -108,6 +143,23 @@
 </div>
 
 <script>
+  // Fonction pour mettre à jour les barres de progression en temps réel
+  function updateBars() {
+      const eau = document.getElementById('valEau').value;
+      const elec = document.getElementById('valElec').value;
+      
+      // Calcul des pourcentages (max 60L pour eau, 5kWh pour elec)
+      const pEau = Math.min((eau / 60) * 100, 100);
+      const pElec = Math.min((elec / 5) * 100, 100);
+      
+      document.getElementById('barEau').style.width = pEau + '%';
+      document.getElementById('barElec').style.width = pElec + '%';
+
+      // Changement de couleur si dépassement
+      document.getElementById('barEau').style.background = pEau > 90 ? '#f44336' : '#2196f3';
+      document.getElementById('barElec').style.background = pElec > 90 ? '#f44336' : '#ff9800';
+  }
+
   function getUsers() { return JSON.parse(localStorage.getItem("users")||"{}"); }
   function saveUsers(users) { localStorage.setItem("users", JSON.stringify(users)); }
 
