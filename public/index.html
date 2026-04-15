@@ -10,8 +10,8 @@
     input { width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; }
     button { width:100%; padding:10px; border:none; border-radius:8px; background:#667eea; color:white; font-size:16px; cursor:pointer; }
     .link { margin-top:10px; display:block; color:#667eea; cursor:pointer; }
-    nav { background:#333; padding:10px; display:flex; justify-content:space-around; }
-    nav button { background:none; border:none; color:white; cursor:pointer; }
+    nav { background:#333; padding:10px; display:flex; justify-content:space-around; align-items: center; }
+    nav button { background:none; border:none; color:white; cursor:pointer; display: flex; align-items: center; gap: 5px; }
     .page { display:none; padding:20px; background:white; min-height:calc(100vh - 50px); overflow-y: auto; }
     .active { display:block; }
     #messages, #aiMessages, #botMessages { height:250px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin-bottom:10px; text-align: left; }
@@ -40,6 +40,9 @@
     .container-gallery img { width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); height: 250px; object-fit: cover; }
     .contact-info { background: #667eea; color: white; padding: 20px; border-radius: 10px; margin-top: 30px; font-weight: bold; }
     .contact-info a { color: #fff; text-decoration: underline; }
+
+    /* Style Logo Gemini */
+    .gemini-icon { width: 18px; height: 18px; }
   </style>
 </head>
 <body>
@@ -70,7 +73,9 @@
     <button onclick="showPage('profile')">Profil</button>
     <button onclick="showPage('chat')">Chat</button>
     <button onclick="showPage('bot')">Chatbot 🤖</button>
-    <button onclick="showPage('ai')">IA</button>
+    <button onclick="showPage('ai')">
+        IA <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/google-gemini-icon.png" class="gemini-icon" alt="Gemini">
+    </button>
     <button onclick="logout()">Déconnexion</button>
   </nav>
 
