@@ -1,10 +1,11 @@
+
 import express from "express";
 
 const app = express();
 app.use(express.json());
 
-// 🔑 clé IA
-const HF_TOKEN = "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";
+// 🔑 clé IA (sécurisée via Render)
+const HF_TOKEN = process.env.HF_TOKEN;
 
 // 🤖 IA
 app.post("/chat", async (req, res) => {
@@ -52,6 +53,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Serveur lancé sur port " + PORT);
 });
+
 
 
 
