@@ -24,10 +24,8 @@
     .card input[type="number"] { width: 60px; padding: 5px; margin: 0; display: inline-block; }
     .bar-bg { background: #eee; height: 10px; border-radius: 5px; margin-top: 10px; overflow: hidden; }
     .bar-fill { height: 100%; border-radius: 5px; transition: width 0.3s ease; }
-    
     .devices-list { margin-top: 20px; text-align: left; background: #fdfdfd; border: 1px solid #eee; padding: 15px; border-radius: 10px; }
     .device-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed #eee; }
-    .device-item:last-child { border-bottom: none; }
     .device-item input { width: 50px !important; padding: 2px !important; margin: 0 !important; text-align: center; }
 
     .bot-intro { display: flex; align-items: center; background: #f0f4ff; padding: 10px; border-radius: 10px; margin-bottom: 15px; }
@@ -40,7 +38,6 @@
     .container-gallery img { width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); height: 250px; object-fit: cover; }
     .contact-info { background: #667eea; color: white; padding: 20px; border-radius: 10px; margin-top: 30px; font-weight: bold; }
     .contact-info a { color: #fff; text-decoration: underline; }
-
     .gemini-icon { width: 18px; height: 18px; }
   </style>
 </head>
@@ -71,7 +68,7 @@
     <button onclick="showPage('home')">Accueil</button>
     <button onclick="showPage('profile')">Profil</button>
     <button onclick="showPage('chat')">Chat</button>
-    <button onclick="showPage('bot')">Chatbot 🤖</button>
+    <button onclick="showPage('bot')">Chatbot</button>
     <button onclick="showPage('ai')">
         IA <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/google-gemini-icon.png" class="gemini-icon" alt="Gemini">
     </button>
@@ -81,20 +78,18 @@
   <div id="home" class="page active">
     <div class="home-header">
         <h1>Votre conteneur aménagé</h1>
-        <p>Un lieu de travail accessible à tous durable moderne et sécurisé</p>
+        <p>Un lieu de travail durable moderne et sécurisé</p>
     </div>
     <div class="container-gallery">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSopQV4rEcs3Z5yjtR_7T4Wvkso1ov7KLOPGQ&s" alt="Extérieur">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSopQV4rEcs3Z5yjtR_7T4Wvkso1ov7KLOPGQ&s" alt="Bureau">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPR_QjxMnqycbloo-aF3iyzjUJPQ8bE-3LqQ&s" alt="Intérieur">
     </div>
-    <div style="line-height: 1.6; color: #444; text-align: center;">
-        <p>Bienvenue sur ton site personnel. Tes accès sont sécurisés.</p>
-        <p style="font-size: 1.1em; color: #667eea; margin-top: 20px;">
-          <strong>💡 Consulte le chatbot en cas de besoin !</strong>
-        </p>
+    <div style="text-align: center;">
+        <p>Bienvenue sur ton espace sécurisé.</p>
+        <p style="color: #667eea;"><strong>N'hésite pas à utiliser le chatbot !</strong></p>
     </div>
     <div class="contact-info">
-        📩 Contact : <a href="mailto:messadleon@gmail.com">messadleon@gmail.com</a>
+        Contactez-nous : <a href="mailto:messadleon@gmail.com">messadleon@gmail.com</a>
     </div>
   </div>
 
@@ -103,21 +98,15 @@
     <p id="userDisplay" style="font-weight:bold; color:#667eea;"></p>
     <div class="energy-grid">
         <div class="card" style="background:#e3f2fd;">
-            <strong>💧 Eau</strong>
-            <p><input type="number" id="valEau" value="45" oninput="updateBars()"> / 60L</p>
+            <strong>Eau (L)</strong>
+            <input type="number" id="valEau" value="45" oninput="updateBars()"> / 60L
             <div class="bar-bg"><div id="barEau" class="bar-fill" style="width:75%; background:#2196f3;"></div></div>
         </div>
         <div class="card" style="background:#fff3e0;">
-            <strong>⚡ Électricité</strong>
-            <p><input type="number" id="valElec" value="2.4" step="0.1" oninput="updateBars()"> / 5 kWh</p>
+            <strong>Électricité (kWh)</strong>
+            <input type="number" id="valElec" value="2.4" step="0.1" oninput="updateBars()"> / 5 kWh
             <div class="bar-bg"><div id="barElec" class="bar-fill" style="width:48%; background:#ff9800;"></div></div>
         </div>
-    </div>
-    <div class="devices-list">
-        <h3>🔌 Consommation Estimée</h3>
-        <div class="device-item"><span>💻 Ordinateur</span><div><input type="number" value="0.5" step="0.1"> kWh</div></div>
-        <div class="device-item"><span>🧊 Frigo</span><div><input type="number" value="0.8" step="0.1"> kWh</div></div>
-        <div class="device-item"><span>🌡️ Radiateur</span><div><input type="number" value="1.2" step="0.1"> kWh</div></div>
     </div>
   </div>
 
@@ -131,53 +120,42 @@
   <div id="bot" class="page">
     <div class="bot-intro">
         <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" class="bot-avatar" alt="Robot">
-        <div><h3 style="margin:0">Assistant Robot</h3><small>Réponses instantanées</small></div>
+        <div><h3>Assistant Robot</h3><small>Je t'écoute !</small></div>
     </div>
     <div id="botMessages"><div><b>Robot:</b> Bonjour ! Pose-moi une question sur le site.</div></div>
-    <input id="botInput" placeholder="Ex: eau, elec, aide...">
+    <input id="botInput" placeholder="Ex: aide, elec...">
     <button onclick="askBot()">Demander</button>
   </div>
 
   <div id="ai" class="page">
     <h2>Assistant IA ✨</h2>
     <div id="aiMessages"></div>
-    <input id="aiInput" placeholder="Pose une question complexe à l'IA...">
+    <input id="aiInput" placeholder="Pose ta question...">
     <button onclick="sendAI()">Envoyer</button>
   </div>
 </div>
 
 <script>
-  const botResponses = {
-    "bonjour": "Salut ! Comment puis-je t'aider ?",
-    "bjr": "Bonjour !",
-    "ca va": "Super, et toi ?",
-    "eau": "Limite de 60L par jour conseillée.",
-    "elec": "Limite de 5kWh par jour pour rester écolo.",
-    "aide": "Mots clés : eau, elec, profil, chat, ia, contact.",
-    "contact": "Contacte Léon à messadleon@gmail.com",
-    "merci": "De rien !"
-  };
-
-  function showPage(pageId){
-    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-    document.getElementById(pageId).classList.add("active");
+  // --- LOGIQUE NAVIGATION & AUTH ---
+  function showPage(id){
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
   }
 
-  function askBot() {
-    const input = document.getElementById("botInput");
-    const messages = document.getElementById("botMessages");
-    let text = input.value.toLowerCase().trim();
-    if(!text) return;
-    messages.innerHTML += `<div><b>Toi:</b> ${input.value}</div>`;
-    let reply = "Je ne connais pas ce mot. Tape 'aide'.";
-    for(let key in botResponses) { if(text.includes(key)) reply = botResponses[key]; }
-    setTimeout(() => {
-        messages.innerHTML += `<div style="color:#667eea"><b>Robot:</b> ${reply}</div>`;
-        messages.scrollTop = messages.scrollHeight;
-    }, 300);
-    input.value = "";
+  function login(){
+    let user = document.getElementById("loginUser").value.trim();
+    if(user){
+      document.getElementById("loginPage").style.display="none";
+      document.getElementById("mainSite").style.display="block";
+      document.getElementById("userDisplay").innerText="Compte de : " + user;
+    }
   }
 
+  function logout(){ location.reload(); }
+  function showRegister(){ document.getElementById("loginPage").style.display="none"; document.getElementById("registerPage").style.display="flex"; }
+  function showLogin(){ document.getElementById("registerPage").style.display="none"; document.getElementById("loginPage").style.display="flex"; }
+
+  // --- LOGIQUE BARS ENERGIE ---
   function updateBars() {
       const eau = document.getElementById('valEau').value;
       const elec = document.getElementById('valElec').value;
@@ -185,49 +163,41 @@
       document.getElementById('barElec').style.width = Math.min((elec/5)*100, 100) + '%';
   }
 
-  function login() {
-    let user=document.getElementById("loginUser").value.trim();
-    if(user){
-      document.getElementById("loginPage").style.display="none";
-      document.getElementById("mainSite").style.display="block";
-      document.getElementById("userDisplay").innerText="Compte de : " + user;
-    }
+  // --- LOGIQUE ROBOT LOCAL ---
+  const botResponses = { "aide": "Je peux t'aider sur : profil, eau, elec, contact.", "bjr": "Bonjour !", "contact": "Écris à messadleon@gmail.com" };
+  function askBot() {
+    const input = document.getElementById("botInput");
+    const msg = document.getElementById("botMessages");
+    if(!input.value) return;
+    msg.innerHTML += `<div><b>Toi:</b> ${input.value}</div>`;
+    let res = botResponses[input.value.toLowerCase()] || "Essaie 'aide'.";
+    setTimeout(() => { msg.innerHTML += `<div style="color:#667eea"><b>Robot:</b> ${res}</div>`; msg.scrollTop = msg.scrollHeight; }, 400);
+    input.value = "";
   }
-  function logout(){ location.reload(); }
-  function showRegister(){document.getElementById("loginPage").style.display="none"; document.getElementById("registerPage").style.display="flex";}
-  function showLogin(){document.getElementById("registerPage").style.display="none"; document.getElementById("loginPage").style.display="flex";}
-</script>
 
-<script type="importmap">
-  { "imports": { "@google/generative-ai": "https://esm.run/@google/generative-ai" } }
-</script>
-
-<script type="module">
-  import { GoogleGenerativeAI } from "@google/generative-ai";
-
-  const API_KEY = "AIzaSyAE_I9csyHDhhUtE9JYnCk5BcxXcUF6HRo"; // Ta clé API
-  const genAI = new GoogleGenerativeAI(API_KEY);
-
+  // --- LOGIQUE IA (RENDER) ---
   async function sendAI() {
     const input = document.getElementById("aiInput");
-    const display = document.getElementById("aiMessages");
+    const messages = document.getElementById("aiMessages");
     const text = input.value.trim();
     if(!text) return;
 
-    display.innerHTML += `<div><b>Toi:</b> ${text}</div>`;
+    messages.innerHTML += `<div><b>Toi:</b> ${text}</div>`;
     input.value = "";
 
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const result = await model.generateContent(text);
-      const response = await result.response;
-      display.innerHTML += `<div style="color:#764ba2"><b>IA:</b> ${response.text()}</div>`;
-    } catch (e) {
-      display.innerHTML += `<div><b>IA:</b> Erreur ou clé invalide.</div>`;
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
+      });
+      const data = await response.json();
+      messages.innerHTML += `<div style="color:#764ba2"><b>IA ✨:</b> ${data.reply}</div>`;
+    } catch(err) {
+      messages.innerHTML += `<div><b>IA:</b> Erreur serveur Render.</div>`;
     }
-    display.scrollTop = display.scrollHeight;
+    messages.scrollTop = messages.scrollHeight;
   }
-  window.sendAI = sendAI;
 </script>
 
 <script type="module">
@@ -245,16 +215,16 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  document.getElementById("chatBtn").addEventListener("click", ()=>{
-    const user = document.getElementById("userDisplay").innerText.replace("Compte de : ","");
+  document.getElementById("chatBtn").onclick = () => {
+    const user = document.getElementById("userDisplay").innerText.replace("Compte de : ","") || "Anonyme";
     const text = document.getElementById("msgInput").value.trim();
     if(text) push(ref(db,"messages"), {user, text});
     document.getElementById("msgInput").value="";
-  });
+  };
 
-  onChildAdded(ref(db,"messages"), snapshot=>{
-    const data=snapshot.val();
-    document.getElementById("messages").innerHTML+=`<div><b>${data.user}:</b> ${data.text}</div>`;
+  onChildAdded(ref(db,"messages"), snapshot => {
+    const data = snapshot.val();
+    document.getElementById("messages").innerHTML += `<div><b>${data.user}:</b> ${data.text}</div>`;
     document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
   });
 </script>
