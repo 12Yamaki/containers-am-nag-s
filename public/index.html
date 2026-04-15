@@ -77,17 +77,19 @@
   <div id="home" class="page active">
     <div class="home-header">
         <h1>Votre conteneur aménagé</h1>
-        <p>L'habitat modulaire : durable, moderne et sur mesure.</p>
+        <p>Un lieu de travail accessible à tous durable moderne et sécurisé</p>
     </div>
 
     <div class="container-gallery">
-        <img src="https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?q=80&w=1000&auto=format&fit=crop" alt="Conteneur aménagé maison">
-        <img src="https://images.unsplash.com/photo-1493444059005-08183141f17e?q=80&w=1000&auto=format&fit=crop" alt="Conteneur aménagé bureau">
+        <img src="https://images.unsplash.com/photo-1524314541743-41f237f37435?q=80&w=1000&auto=format&fit=crop" alt="Bureau conteneur extérieur">
+        <img src="https://images.unsplash.com/photo-1543326162-8e100862086e?q=80&w=1000&auto=format&fit=crop" alt="Intérieur conteneur bureau">
     </div>
 
-    <div style="line-height: 1.6; color: #444;">
-        <p>Bienvenue sur notre plateforme dédiée à la révolution de l'espace. Nous transformons des conteneurs maritimes en véritables lieux de vie et de travail optimisés. Chaque projet est une fusion entre écologie et architecture contemporaine.</p>
-        <p><strong>Nos points forts :</strong> Rapidité d'installation, isolation haute performance et design industriel unique.</p>
+    <div style="line-height: 1.6; color: #444; text-align: center;">
+        <p>Bienvenue sur ton site personnel merci de ne pas partager tes codes grâce à ça ton espace reste sécurisé.</p>
+        <p style="font-size: 1.1em; color: #667eea; margin-top: 20px;">
+          <strong>💡 N'hésite pas à cotoyer le chatbot en cas de soucis ou de questions !</strong>
+        </p>
     </div>
 
     <div class="contact-info">
@@ -168,7 +170,6 @@
 </div>
 
 <script>
-  // --- LOGIQUE DU CHATBOT AMÉLIORÉE ---
   const botResponses = {
     "bonjour": "Salut ! Comment puis-je t'aider aujourd'hui ?",
     "bjr": "Bonjour ! Prêt à économiser ?",
@@ -200,26 +201,20 @@
     const messages = document.getElementById("botMessages");
     let rawText = input.value.toLowerCase().trim();
     if(!rawText) return;
-
     messages.innerHTML += `<div><b>Toi:</b> ${input.value}</div>`;
-    
     let cleanedText = rawText.replace(/(.)\1{2,}/g, '$1$1'); 
     cleanedText = cleanedText.replace(/[?!.,]/g, "");
-
     let reply = "Désolé, je ne connais pas encore ce mot. Tape 'aide' !";
-    
     for (let key in botResponses) {
         if (cleanedText.includes(key) || rawText.includes(key)) {
             reply = botResponses[key];
             break;
         }
     }
-
     setTimeout(() => {
         messages.innerHTML += `<div style="color:#667eea"><b>Robot:</b> ${reply}</div>`;
         messages.scrollTop = messages.scrollHeight;
     }, 400);
-
     input.value = "";
   }
 
