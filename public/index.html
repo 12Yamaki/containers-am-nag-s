@@ -41,7 +41,6 @@
     .contact-info { background: #667eea; color: white; padding: 20px; border-radius: 10px; margin-top: 30px; font-weight: bold; }
     .contact-info a { color: #fff; text-decoration: underline; }
 
-    /* Style Logo Gemini */
     .gemini-icon { width: 18px; height: 18px; }
   </style>
 </head>
@@ -84,63 +83,41 @@
         <h1>Votre conteneur aménagé</h1>
         <p>Un lieu de travail accessible à tous durable moderne et sécurisé</p>
     </div>
-
     <div class="container-gallery">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSopQV4rEcs3Z5yjtR_7T4Wvkso1ov7KLOPGQ&s" alt="Bureau conteneur extérieur">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPR_QjxMnqycbloo-aF3iyzjUJPQ8bE-3LqQ&s" alt="Intérieur conteneur bureau">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSopQV4rEcs3Z5yjtR_7T4Wvkso1ov7KLOPGQ&s" alt="Extérieur">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPR_QjxMnqycbloo-aF3iyzjUJPQ8bE-3LqQ&s" alt="Intérieur">
     </div>
-
     <div style="line-height: 1.6; color: #444; text-align: center;">
-        <p>Bienvenue sur ton site personnel merci de ne pas partager tes codes grâce à ça ton espace reste sécurisé.</p>
+        <p>Bienvenue sur ton site personnel. Tes accès sont sécurisés.</p>
         <p style="font-size: 1.1em; color: #667eea; margin-top: 20px;">
-          <strong>💡 N'hésite pas à cotoyer le chatbot en cas de soucis ou de questions !</strong>
+          <strong>💡 Consulte le chatbot en cas de besoin !</strong>
         </p>
     </div>
-
     <div class="contact-info">
-        📩 Une question ou un projet ? Contactez-nous : <br>
-        <a href="mailto:messadleon@gmail.com">messadleon@gmail.com</a>
+        📩 Contact : <a href="mailto:messadleon@gmail.com">messadleon@gmail.com</a>
     </div>
   </div>
 
   <div id="profile" class="page">
-    <h2>Mon Profil Énergétique Interactif</h2>
+    <h2>Mon Profil Énergétique</h2>
     <p id="userDisplay" style="font-weight:bold; color:#667eea;"></p>
-    
     <div class="energy-grid">
         <div class="card" style="background:#e3f2fd;">
-            <strong>💧 Eau (Litres)</strong>
+            <strong>💧 Eau</strong>
             <p><input type="number" id="valEau" value="45" oninput="updateBars()"> / 60L</p>
             <div class="bar-bg"><div id="barEau" class="bar-fill" style="width:75%; background:#2196f3;"></div></div>
         </div>
         <div class="card" style="background:#fff3e0;">
-            <strong>⚡ Électricité (kWh)</strong>
+            <strong>⚡ Électricité</strong>
             <p><input type="number" id="valElec" value="2.4" step="0.1" oninput="updateBars()"> / 5 kWh</p>
             <div class="bar-bg"><div id="barElec" class="bar-fill" style="width:48%; background:#ff9800;"></div></div>
         </div>
     </div>
-
     <div class="devices-list">
-        <h3>🔌 Détail par appareil (Consommation estimée)</h3>
-        <div class="device-item"><span>💻 Ordinateur Portable</span><div><input type="number" value="0.5" step="0.1"> kWh</div></div>
-        <div class="device-item"><span>🔌 Prises secteur (Total)</span><div><input type="number" value="0.3" step="0.1"> kWh</div></div>
+        <h3>🔌 Consommation Estimée</h3>
+        <div class="device-item"><span>💻 Ordinateur</span><div><input type="number" value="0.5" step="0.1"> kWh</div></div>
         <div class="device-item"><span>🧊 Frigo</span><div><input type="number" value="0.8" step="0.1"> kWh</div></div>
-        <div class="device-item"><span>🚰 Robinet / Douche</span><div><input type="number" value="15"> Litres</div></div>
         <div class="device-item"><span>🌡️ Radiateur</span><div><input type="number" value="1.2" step="0.1"> kWh</div></div>
-        <div class="device-item"><span>🔥 Chauffe-eau</span><div><input type="number" value="2.0" step="0.1"> kWh</div></div>
-    </div>
-
-    <div style="margin-top:20px; padding:15px; background:#f1f8e9; border-radius:10px; text-align:left;">
-        <h3>🌡️ Gestion Thermique</h3>
-        <p>Température recommandée : <strong>19°C</strong></p>
-        <p>Statut : <span style="color:green;">Optimisé</span></p>
-        <hr>
-        <h4>💡 Conseils Éco</h4>
-        <ul style="padding-left:20px;">
-            <li>Activer le chauffe-eau entre 22h et 6h.</li>
-            <li>Baisser le radiateur de 2°C lors de vos absences.</li>
-            <li>Utiliser la lumière naturelle autant que possible.</li>
-        </ul>
     </div>
   </div>
 
@@ -154,173 +131,103 @@
   <div id="bot" class="page">
     <div class="bot-intro">
         <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" class="bot-avatar" alt="Robot">
-        <div>
-            <h3 style="margin:0">Assistant Robot</h3>
-            <small>Je réponds à tes questions !</small>
-        </div>
+        <div><h3 style="margin:0">Assistant Robot</h3><small>Réponses instantanées</small></div>
     </div>
-    <div id="botMessages">
-        <div><b>Robot:</b> Bonjour ! Je connais tout sur ce site. Pose-moi une question !</div>
-    </div>
-    <input id="botInput" placeholder="Ex: bjr, profil, elec, ca va ?">
+    <div id="botMessages"><div><b>Robot:</b> Bonjour ! Pose-moi une question sur le site.</div></div>
+    <input id="botInput" placeholder="Ex: eau, elec, aide...">
     <button onclick="askBot()">Demander</button>
   </div>
 
   <div id="ai" class="page">
-    <h2>Assistant IA</h2>
+    <h2>Assistant IA ✨</h2>
     <div id="aiMessages"></div>
-    <input id="aiInput" placeholder="Pose ta question...">
+    <input id="aiInput" placeholder="Pose une question complexe à l'IA...">
     <button onclick="sendAI()">Envoyer</button>
   </div>
 </div>
 
 <script>
   const botResponses = {
-    // Politesse & Salutations
-    "bonjour": "Salut ! Comment puis-je t'aider aujourd'hui ?",
-    "bjr": "Bonjour ! Prêt à économiser ?",
-    "salut": "Hello ! Je suis ton assistant robotisé.",
-    "slt": "Salut ! Quoi de neuf dans les conteneurs ?",
-    "coucou": "Coucou ! On surveille l'énergie ?",
-    "cc": "Coucou ! Besoin d'aide ?",
-    "ca va": "Je vais très bien, mes circuits sont au top ! Et toi ?",
-    "cv": "Ça va super ! Je suis un robot heureux.",
-    "merci": "De rien ! À ton service ! 🤖",
-    "mrc": "Avec plaisir !",
-    "bye": "Au revoir ! Pense à éteindre le radiateur avant de partir !",
-    "a plus": "À plus tard ! Sois écolo !",
-    "yo": "Yo ! Qu'est-ce qu'on code aujourd'hui ?",
-
-    // Navigation & Site
-    "ou": "Je suis ici, dans ton navigateur !",
-    "aide": "Je peux t'aider sur : profil, eau, elec, radiateur, chat, ia, contact, bug, firebase.",
-    "accueil": "La page d'accueil présente nos conteneurs durables et modernes.",
-    "conteneur": "C'est un espace de travail optimisé, écologique et sécurisé.",
-    "code": "C'est du HTML, CSS et JavaScript avec une base Firebase !",
-    "site": "Ce site est ton espace personnel pour gérer ton énergie et discuter.",
-
-    // Energie & Profil
-    "profil": "Dans 'Profil', tu peux voir tes barres d'eau et d'électricité.",
-    "eau": "On limite à 60L par jour pour être écolo. Surveille ta barre bleue !",
-    "douche": "Une douche rapide consomme environ 15-20 Litres.",
-    "elec": "L'électricité est limitée à 5 kWh par jour. Éteins tes lumières !",
-    "electricite": "L'électricité est limitée à 5 kWh par jour. Attention au radiateur !",
-    "radiateur": "Le radiateur consomme 1.2 kWh. Règle-le sur 19°C, c'est mieux !",
-    "chauffage": "Le chauffage consomme beaucoup. 19°C est la température idéale.",
-    "frigo": "Le frigo consomme 0.8 kWh. Ne laisse pas la porte ouverte !",
-    "ordinateur": "Un laptop consomme environ 0.5 kWh par jour.",
-    "pc": "Ton PC est l'outil principal, mais pense à le mettre en veille !",
-    "clim": "On préfère l'isolation naturelle, mais surveille la température !",
-    "temp": "On recommande 19°C pour un équilibre confort/énergie.",
-    "kwh": "Le kilo-Watt-heure est l'unité de mesure de ton énergie électrique.",
-
-    // Chat & IA
-    "chat": "Le Chat permet de parler aux autres collègues en direct via Firebase.",
-    "ia": "L'IA (onglet à côté) est plus intelligente que moi, elle utilise Gemini !",
-    "gemini": "Gemini est l'IA de Google qui alimente l'onglet Assistant IA.",
-    "robot": "C'est moi ! Un petit script pour t'aider rapidement.",
-    "message": "Tu peux envoyer des messages dans l'onglet Chat.",
-
-    // Technique & Bug
-    "bug": "Si ça bug, essaie de rafraîchir la page (F5).",
-    "firebase": "C'est notre base de données en temps réel pour le chat.",
-    "connexion": "Vérifie tes identifiants ou crée un compte si c'est ta première fois.",
-    "login": "Le login sécurise ton accès personnel au site.",
-    "pass": "Ton mot de passe est stocké localement ou géré par ton navigateur.",
-    "database": "La Database est chez Firebase, elle enregistre les messages du chat.",
-
-    // Contact & Créateur
-    "contact": "Tu peux écrire à messadleon@gmail.com pour toute question.",
-    "mail": "L'adresse email de contact est messadleon@gmail.com.",
-    "leon": "Léon Messad est le créateur et contact principal du projet.",
-    "createur": "Le site a été conçu pour la gestion des conteneurs aménagés.",
-
-    // Vie au Bureau
-    "cafe": "La machine à café consomme peu, mais n'en abuse pas ! ☕",
-    "manger": "Bon appétit ! N'oublie pas de bien fermer le frigo.",
-    "travail": "Le travail dans un conteneur est plus productif quand il fait 19°C !",
-    "fatigue": "Prends une pause ! Va voir la galerie d'images en accueil.",
-    "nuit": "Le soir, active le chauffe-eau pour profiter des heures creuses.",
-
-    // Divers & Fun
-    "blague": "Pourquoi les plongeurs plongent-ils toujours en arrière ? Parce que sinon ils tombent dans le bateau !",
-    "musique": "Mets un casque pour ne pas déranger les collègues dans le conteneur.",
-    "secret": "Le secret d'un bon conteneur ? Une bonne isolation !",
-    "couleur": "J'aime bien le dégradé violet/bleu du site, et toi ?"
+    "bonjour": "Salut ! Comment puis-je t'aider ?",
+    "bjr": "Bonjour !",
+    "ca va": "Super, et toi ?",
+    "eau": "Limite de 60L par jour conseillée.",
+    "elec": "Limite de 5kWh par jour pour rester écolo.",
+    "aide": "Mots clés : eau, elec, profil, chat, ia, contact.",
+    "contact": "Contacte Léon à messadleon@gmail.com",
+    "merci": "De rien !"
   };
+
+  function showPage(pageId){
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+    document.getElementById(pageId).classList.add("active");
+  }
 
   function askBot() {
     const input = document.getElementById("botInput");
     const messages = document.getElementById("botMessages");
-    let rawText = input.value.toLowerCase().trim();
-    if(!rawText) return;
+    let text = input.value.toLowerCase().trim();
+    if(!text) return;
     messages.innerHTML += `<div><b>Toi:</b> ${input.value}</div>`;
-    
-    // Nettoyage : enlever les lettres répétées (ex: bjr leeeeeeon -> bjr leon)
-    let cleanedText = rawText.replace(/(.)\1{2,}/g, '$1$1'); 
-    cleanedText = cleanedText.replace(/[?!.,]/g, "");
-    
-    let reply = "Désolé, je ne connais pas encore ce mot. Essaie 'aide', 'elec' ou 'contact' !";
-    
-    // Recherche par mot clé
-    for (let key in botResponses) {
-        if (cleanedText.includes(key)) {
-            reply = botResponses[key];
-            break;
-        }
-    }
-    
+    let reply = "Je ne connais pas ce mot. Tape 'aide'.";
+    for(let key in botResponses) { if(text.includes(key)) reply = botResponses[key]; }
     setTimeout(() => {
         messages.innerHTML += `<div style="color:#667eea"><b>Robot:</b> ${reply}</div>`;
         messages.scrollTop = messages.scrollHeight;
-    }, 400);
+    }, 300);
     input.value = "";
   }
 
   function updateBars() {
       const eau = document.getElementById('valEau').value;
       const elec = document.getElementById('valElec').value;
-      const pEau = Math.min((eau / 60) * 100, 100);
-      const pElec = Math.min((elec / 5) * 100, 100);
-      document.getElementById('barEau').style.width = pEau + '%';
-      document.getElementById('barElec').style.width = pElec + '%';
-      document.getElementById('barEau').style.background = pEau > 90 ? '#f44336' : '#2196f3';
-      document.getElementById('barElec').style.background = pElec > 90 ? '#f44336' : '#ff9800';
-  }
-
-  function getUsers() { return JSON.parse(localStorage.getItem("users")||"{}"); }
-  function saveUsers(users) { localStorage.setItem("users", JSON.stringify(users)); }
-
-  function register() {
-    let user = document.getElementById("registerUser").value.trim();
-    let pass = document.getElementById("registerPass").value.trim();
-    if(!user||!pass){alert("Remplis tous les champs"); return;}
-    let users = getUsers();
-    if(users[user]){alert("Utilisateur déjà existant"); return;}
-    users[user]=pass; saveUsers(users); alert("Compte créé !"); showLogin();
+      document.getElementById('barEau').style.width = Math.min((eau/60)*100, 100) + '%';
+      document.getElementById('barElec').style.width = Math.min((elec/5)*100, 100) + '%';
   }
 
   function login() {
     let user=document.getElementById("loginUser").value.trim();
-    let pass=document.getElementById("loginPass").value.trim();
-    let users=getUsers();
-    if(users[user] && users[user]===pass){
+    if(user){
       document.getElementById("loginPage").style.display="none";
       document.getElementById("mainSite").style.display="block";
       document.getElementById("userDisplay").innerText="Compte de : " + user;
-    }else{alert("Identifiants incorrects");}
+    }
   }
-
   function logout(){ location.reload(); }
   function showRegister(){document.getElementById("loginPage").style.display="none"; document.getElementById("registerPage").style.display="flex";}
   function showLogin(){document.getElementById("registerPage").style.display="none"; document.getElementById("loginPage").style.display="flex";}
-  function showPage(pageId){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active")); document.getElementById(pageId).classList.add("active");}
+</script>
 
-  document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("botInput").addEventListener("keypress", (e) => { if(e.key === "Enter") askBot(); });
-    document.getElementById("aiInput").addEventListener("keypress", (e) => { if(e.key === "Enter") sendAI(); });
-    document.getElementById("msgInput").addEventListener("keypress", (e) => { if(e.key === "Enter") document.getElementById("chatBtn").click(); });
-  });
+<script type="importmap">
+  { "imports": { "@google/generative-ai": "https://esm.run/@google/generative-ai" } }
+</script>
+
+<script type="module">
+  import { GoogleGenerativeAI } from "@google/generative-ai";
+
+  const API_KEY = "AIzaSyAE_I9csyHDhhUtE9JYnCk5BcxXcUF6HRo"; // Ta clé API
+  const genAI = new GoogleGenerativeAI(API_KEY);
+
+  async function sendAI() {
+    const input = document.getElementById("aiInput");
+    const display = document.getElementById("aiMessages");
+    const text = input.value.trim();
+    if(!text) return;
+
+    display.innerHTML += `<div><b>Toi:</b> ${text}</div>`;
+    input.value = "";
+
+    try {
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const result = await model.generateContent(text);
+      const response = await result.response;
+      display.innerHTML += `<div style="color:#764ba2"><b>IA:</b> ${response.text()}</div>`;
+    } catch (e) {
+      display.innerHTML += `<div><b>IA:</b> Erreur ou clé invalide.</div>`;
+    }
+    display.scrollTop = display.scrollHeight;
+  }
+  window.sendAI = sendAI;
 </script>
 
 <script type="module">
@@ -339,8 +246,7 @@
   const db = getDatabase(app);
 
   document.getElementById("chatBtn").addEventListener("click", ()=>{
-    const userDisplay = document.getElementById("userDisplay").innerText;
-    const user = userDisplay ? userDisplay.replace("Compte de : ","") : "Anonyme";
+    const user = document.getElementById("userDisplay").innerText.replace("Compte de : ","");
     const text = document.getElementById("msgInput").value.trim();
     if(text) push(ref(db,"messages"), {user, text});
     document.getElementById("msgInput").value="";
@@ -351,29 +257,6 @@
     document.getElementById("messages").innerHTML+=`<div><b>${data.user}:</b> ${data.text}</div>`;
     document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
   });
-</script>
-
-<script>
-  async function sendAI(){
-    const aiInput = document.getElementById("aiInput");
-    const aiMessages = document.getElementById("aiMessages");
-    const text = aiInput.value.trim();
-    if(!text) return;
-    aiMessages.innerHTML+=`<div><b>Toi:</b> ${text}</div>`;
-    aiInput.value="";
-    try {
-      const response = await fetch("/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text })
-      });
-      const data = await response.json();
-      aiMessages.innerHTML+=`<div><b>IA:</b> ${data.reply}</div>`;
-      aiMessages.scrollTop = aiMessages.scrollHeight;
-    } catch(err) {
-      aiMessages.innerHTML+=`<div><b>IA:</b> Erreur de connexion au serveur 😢</div>`;
-    }
-  }
 </script>
 
 </body>
