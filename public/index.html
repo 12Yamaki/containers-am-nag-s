@@ -176,6 +176,7 @@
 
 <script>
   const botResponses = {
+    // Politesse & Salutations
     "bonjour": "Salut ! Comment puis-je t'aider aujourd'hui ?",
     "bjr": "Bonjour ! Prêt à économiser ?",
     "salut": "Hello ! Je suis ton assistant robotisé.",
@@ -184,21 +185,68 @@
     "cc": "Coucou ! Besoin d'aide ?",
     "ca va": "Je vais très bien, mes circuits sont au top ! Et toi ?",
     "cv": "Ça va super ! Je suis un robot heureux.",
+    "merci": "De rien ! À ton service ! 🤖",
+    "mrc": "Avec plaisir !",
+    "bye": "Au revoir ! Pense à éteindre le radiateur avant de partir !",
+    "a plus": "À plus tard ! Sois écolo !",
+    "yo": "Yo ! Qu'est-ce qu'on code aujourd'hui ?",
+
+    // Navigation & Site
     "ou": "Je suis ici, dans ton navigateur !",
+    "aide": "Je peux t'aider sur : profil, eau, elec, radiateur, chat, ia, contact, bug, firebase.",
+    "accueil": "La page d'accueil présente nos conteneurs durables et modernes.",
+    "conteneur": "C'est un espace de travail optimisé, écologique et sécurisé.",
+    "code": "C'est du HTML, CSS et JavaScript avec une base Firebase !",
+    "site": "Ce site est ton espace personnel pour gérer ton énergie et discuter.",
+
+    // Energie & Profil
     "profil": "Dans 'Profil', tu peux voir tes barres d'eau et d'électricité.",
     "eau": "On limite à 60L par jour pour être écolo. Surveille ta barre bleue !",
+    "douche": "Une douche rapide consomme environ 15-20 Litres.",
     "elec": "L'électricité est limitée à 5 kWh par jour. Éteins tes lumières !",
     "electricite": "L'électricité est limitée à 5 kWh par jour. Attention au radiateur !",
     "radiateur": "Le radiateur consomme 1.2 kWh. Règle-le sur 19°C, c'est mieux !",
     "chauffage": "Le chauffage consomme beaucoup. 19°C est la température idéale.",
-    "chat": "Le Chat permet de parler aux autres collègues en direct.",
-    "ia": "L'IA (onglet à côté) est plus intelligente que moi, elle utilise Gemini !",
-    "robot": "C'est moi ! Un petit script pour t'aider rapidement.",
     "frigo": "Le frigo consomme 0.8 kWh. Ne laisse pas la porte ouverte !",
-    "merci": "De rien ! À ton service ! 🤖",
-    "mrc": "Avec plaisir !",
-    "aide": "Je comprends : profil, eau, elec, radiateur, chat, ia, bjr, ca va.",
-    "bye": "Au revoir ! Pense à éteindre le radiateur avant de partir !"
+    "ordinateur": "Un laptop consomme environ 0.5 kWh par jour.",
+    "pc": "Ton PC est l'outil principal, mais pense à le mettre en veille !",
+    "clim": "On préfère l'isolation naturelle, mais surveille la température !",
+    "temp": "On recommande 19°C pour un équilibre confort/énergie.",
+    "kwh": "Le kilo-Watt-heure est l'unité de mesure de ton énergie électrique.",
+
+    // Chat & IA
+    "chat": "Le Chat permet de parler aux autres collègues en direct via Firebase.",
+    "ia": "L'IA (onglet à côté) est plus intelligente que moi, elle utilise Gemini !",
+    "gemini": "Gemini est l'IA de Google qui alimente l'onglet Assistant IA.",
+    "robot": "C'est moi ! Un petit script pour t'aider rapidement.",
+    "message": "Tu peux envoyer des messages dans l'onglet Chat.",
+
+    // Technique & Bug
+    "bug": "Si ça bug, essaie de rafraîchir la page (F5).",
+    "firebase": "C'est notre base de données en temps réel pour le chat.",
+    "connexion": "Vérifie tes identifiants ou crée un compte si c'est ta première fois.",
+    "login": "Le login sécurise ton accès personnel au site.",
+    "pass": "Ton mot de passe est stocké localement ou géré par ton navigateur.",
+    "database": "La Database est chez Firebase, elle enregistre les messages du chat.",
+
+    // Contact & Créateur
+    "contact": "Tu peux écrire à messadleon@gmail.com pour toute question.",
+    "mail": "L'adresse email de contact est messadleon@gmail.com.",
+    "leon": "Léon Messad est le créateur et contact principal du projet.",
+    "createur": "Le site a été conçu pour la gestion des conteneurs aménagés.",
+
+    // Vie au Bureau
+    "cafe": "La machine à café consomme peu, mais n'en abuse pas ! ☕",
+    "manger": "Bon appétit ! N'oublie pas de bien fermer le frigo.",
+    "travail": "Le travail dans un conteneur est plus productif quand il fait 19°C !",
+    "fatigue": "Prends une pause ! Va voir la galerie d'images en accueil.",
+    "nuit": "Le soir, active le chauffe-eau pour profiter des heures creuses.",
+
+    // Divers & Fun
+    "blague": "Pourquoi les plongeurs plongent-ils toujours en arrière ? Parce que sinon ils tombent dans le bateau !",
+    "musique": "Mets un casque pour ne pas déranger les collègues dans le conteneur.",
+    "secret": "Le secret d'un bon conteneur ? Une bonne isolation !",
+    "couleur": "J'aime bien le dégradé violet/bleu du site, et toi ?"
   };
 
   function askBot() {
@@ -207,15 +255,21 @@
     let rawText = input.value.toLowerCase().trim();
     if(!rawText) return;
     messages.innerHTML += `<div><b>Toi:</b> ${input.value}</div>`;
+    
+    // Nettoyage : enlever les lettres répétées (ex: bjr leeeeeeon -> bjr leon)
     let cleanedText = rawText.replace(/(.)\1{2,}/g, '$1$1'); 
     cleanedText = cleanedText.replace(/[?!.,]/g, "");
-    let reply = "Désolé, je ne connais pas encore ce mot. Tape 'aide' !";
+    
+    let reply = "Désolé, je ne connais pas encore ce mot. Essaie 'aide', 'elec' ou 'contact' !";
+    
+    // Recherche par mot clé
     for (let key in botResponses) {
-        if (cleanedText.includes(key) || rawText.includes(key)) {
+        if (cleanedText.includes(key)) {
             reply = botResponses[key];
             break;
         }
     }
+    
     setTimeout(() => {
         messages.innerHTML += `<div style="color:#667eea"><b>Robot:</b> ${reply}</div>`;
         messages.scrollTop = messages.scrollHeight;
